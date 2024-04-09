@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/process
+    username: process
+    password: passw0rd
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+
+ibm:
+  mq:
+    channel: DEV.ADMIN.SVRCONN
+    conn-name: localhost(4414)
+    user: admin
+    password: passw0rd
+    sendingQueueName: DEV.TO.Q1
+    receivingQueueName: DEV.TO.Q1
+    queue-manager: QM1

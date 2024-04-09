@@ -1,0 +1,36 @@
+version: '3'
+services:
+  FREEPDB1:
+    container_name: FreeDb
+    image: postgres:alpine3.19
+    environment:
+      - POSTGRES_PASSWORD=passw0rd
+      - POSTGRES_USER=process
+    ports:
+      - "5432:5432"
+    networks:
+      - process
+    restart: always
+  QM1:
+    container_name: QM1
+    image: icr.io/ibm-messaging/mq:9.3.5.0-r2
+    environment:
+      LICENSE: accept
+      MQ_QMGR_NAME: QM1
+      MQ_APP_PASSWORD: passw0rd
+      MQ_ADMIN_PASSWORD: passw0rd
+    volumes:
+      - qm1data:/mnt/mqm
+    ports:
+      - "4414:1414"
+      - "7443:9443"
+    networks:
+      - process
+    restart: always
+
+volumes:
+  qm1data:
+
+networks:
+  process:
+    driver: bridge

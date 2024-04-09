@@ -1,0 +1,35 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 2
+  test:
+    database:
+      replace: none
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+
+ibm:
+  mq:
+    channel: DEV.ADMIN.SVRCONN
+    conn-name: localhost(${MQ_PORT})
+    user: admin
+    password: notsecret
+    sendingQueueName: DEV.QUEUE.1
+    receivingQueueName: DEV.QUEUE.1
+    queue-manager: QM1
