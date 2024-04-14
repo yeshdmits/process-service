@@ -1,0 +1,318 @@
+openapi: 3.0.3
+info:
+  title: Process Service API
+  description: API for building and execution of processes
+  version: 1.0.0
+servers:
+  - url: 'https://{baseURL}:{port}/api/{version}'
+    description: Service URL
+    variables:
+      baseURL:
+        default: yeshenko.com
+      port:
+        default: "443"
+      version:
+        default: v1
+tags:
+  - name: Process Service
+paths:
+  '/process/build':
+    post:
+      tags:
+        - Process
+      operationId: buildProcess
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BuildProcessRequest"
+      responses:
+        '200':
+          description: successful operation
+          content: { }
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '404':
+          description: Content / ID not found
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+  '/process':
+    post:
+      tags:
+        - Process
+      operationId: createProcess
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProcessRequest"
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '404':
+          description: Content / ID not found
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+    get:
+      tags:
+        - Process
+      operationId: getProcess
+      parameters:
+        - name: processId
+          in: query
+          schema:
+            type: string
+            format: uuid
+        - name: processInstanceId
+          in: query
+          schema:
+            type: string
+            format: uuid
+
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcessEntity"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '404':
+          description: Content / ID not found
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+    put:
+      tags:
+        - Process
+      operationId: completeTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaskComplete'
+      responses:
+        '200':
+          description: successful operation
+          content: { }
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '404':
+          description: Content / ID not found
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+components:
+  schemas:
+    TaskComplete:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        formData:
+          type: string
+        decision:
+          type: string
+          enum:
+            - completed
+            - rejected
+
+    ProcessEntity:
+      type: object
+      properties:
+        processEntityId:
+          type: string
+          format: uuid
+        displayName:
+          type: string
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+        taskList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+
+    Metadata:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        taskName:
+          type: string
+        schema:
+          type: string
+    Task:
+      type: object
+      properties:
+        taskId:
+          type: string
+          format: uuid
+        taskName:
+          type: string
+        taskStatus:
+          type: string
+        content:
+          type: string
+        schema:
+          type: string
+        customTaskName:
+          type: string
+    CreateProcessRequest:
+      type: object
+      properties:
+        processDefinitionId:
+          type: string
+          format: uuid
+    BuildProcessRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Process
+        enabled:
+          type: boolean
+          example: true
+        defaultValue:
+          type: boolean
+          example: true
+        processDefinitionKey:
+          type: string
+          example: defaultProductOpening
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaskProcessRequest'
+    TaskProcessRequest:
+      type: object
+      properties:
+        taskDefinitionKey:
+          type: string
+          example: product-opening
+        taskName:
+          type: string
+          example: Product Opening
+        departmentName:
+          type: string
+          example: RM
+        customComponentName:
+          type: string
+        schema:
+          type: string
+          example: |
+            {
+              "title": "A registration form",
+              "description": "A simple form example.",
+              "type": "object",
+              "required": ["firstName", "lastName"],
+              "properties": {
+                "firstName": {"type": "string", "title": "First name", "default": "Chuck"},
+                "lastName": {"type": "string", "title": "Last name"},
+                "age": {"type": "integer", "title": "Age"},
+                "bio": {"type": "string", "title": "Bio"},
+                "password": {"type": "string", "title": "Password", "minLength": 3},
+                "telephone": {"type": "string", "title": "Telephone", "minLength": 10}
+              }
+            }
+        circumsance:
+          type: string
+          example: OPENING
+        specificAssignee:
+          type: boolean
+        variables:
+          type: object
+          properties:
+            accessRoleGroup:
+              type: string
+              example: ADMIN, USER
+            dueDate:
+              type: string
+              example: '3'
+            embeddedComponentURL:
+              type: string
+              example: requests
+            redirectURL:
+              type: string
+              example: product/edit/{id}?target=blank

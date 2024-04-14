@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8888
   servlet:
     context-path: /
 
@@ -17,6 +17,9 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+springdoc:
+  swagger-ui:
+    path: /
 
 ibm:
   mq:
@@ -24,6 +27,6 @@ ibm:
     conn-name: localhost(4414)
     user: admin
     password: passw0rd
-    sendingQueueName: DEV.TO.Q1
-    receivingQueueName: DEV.TO.Q1
+    sendingQueueName: DEV.QUEUE.1
+    receivingQueueName: DEV.QUEUE.1
     queue-manager: QM1

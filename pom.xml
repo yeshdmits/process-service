@@ -24,6 +24,7 @@
     <springboot.maven.plugin.version>3.2.4</springboot.maven.plugin.version>
     <com.ibm.mq.version>3.2.4</com.ibm.mq.version>
     <oracle.ojdbc.version>19.3.0.0</oracle.ojdbc.version>
+    <openapi.client.generator.version>7.4.0</openapi.client.generator.version>
   </properties>
   <dependencies>
     <dependency>
@@ -35,6 +36,15 @@
       <groupId>com.ibm.mq</groupId>
       <artifactId>mq-jms-spring-boot-starter</artifactId>
       <version>${com.ibm.mq.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-logging</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.flowable</groupId>
+      <artifactId>flowable-spring-boot-starter</artifactId>
+      <version>7.0.1</version>
     </dependency>
 
     <dependency>
@@ -84,7 +94,15 @@
       <artifactId>postgresql</artifactId>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+      <version>2.3.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
@@ -147,6 +165,40 @@
             </compilerArg>
           </compilerArgs>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.openapitools</groupId>
+        <artifactId>openapi-generator-maven-plugin</artifactId>
+        <version>${openapi.client.generator.version}</version>
+        <executions>
+          <execution>
+            <id>process-service-v1</id>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <typeMappings>
+                <typeMapping>OffsetDateTime=LocalDateTime</typeMapping>
+              </typeMappings>
+              <importMappings>
+                <importMapping>java.time.OffsetDateTime=java.time.LocalDateTime</importMapping>
+              </importMappings>
+              <inputSpec>${project.basedir}/src/main/resources/openapi/process-service-v1.yaml</inputSpec>
+              <generatorName>spring</generatorName>
+              <apiPackage>com.yeshenko.process.api.v1</apiPackage>
+              <modelPackage>com.yeshenko.process.models.v1</modelPackage>
+              <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+              <modelNameSuffix>Dto</modelNameSuffix>
+              <generatorName>spring</generatorName>
+              <configOptions>
+                <useSpringBoot3>true</useSpringBoot3>
+                <useTags>true</useTags>
+                <delegatePattern>true</delegatePattern>
+                <openApiNullable>false</openApiNullable>
+              </configOptions>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
