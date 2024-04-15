@@ -1,13 +1,17 @@
 package com.yeshenko.process.domain.entity;
 
+import static com.yeshenko.process.domain.entity.ProcessEntity.ProcessEntityColumn.COLUMN_STATUS;
 import static com.yeshenko.process.domain.entity.ProcessEntity.ProcessEntityColumn.PROCESS_DEFINITION_ID_FK;
 import static com.yeshenko.process.domain.entity.ProcessEntity.ProcessEntityColumn.PROCESS_ENTITY;
 import static com.yeshenko.process.domain.entity.ProcessEntity.ProcessEntityColumn.PROCESS_INSTANCE_ID;
 import static com.yeshenko.process.domain.entity.ProcessEntity.ProcessEntityColumn.TABLE_NAME;
 
+import com.yeshenko.process.domain.enumeration.ProcessStatusEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,6 +39,7 @@ public class ProcessEntity {
     public static final String TABLE_NAME = "process";
     public static final String PROCESS_DEFINITION_ID_FK = "process_definition_id_fk";
     public static final String PROCESS_INSTANCE_ID = "process_instance_id";
+    public static final String COLUMN_STATUS = "status";
     public static final String PROCESS_ENTITY = "processEntity";
 
     private ProcessEntityColumn() {}
@@ -51,6 +56,13 @@ public class ProcessEntity {
   @Column(name = PROCESS_INSTANCE_ID)
   private UUID processInstanceId;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name = COLUMN_STATUS)
+  private ProcessStatusEnum status;
+
   @OneToMany(mappedBy = PROCESS_ENTITY, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<TaskEntity> tasks;
+
+  @OneToMany(mappedBy = PROCESS_ENTITY, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  private List<Document> documents;
 }

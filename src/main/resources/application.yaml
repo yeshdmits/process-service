@@ -9,8 +9,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/process
     username: process
     password: passw0rd
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
   jpa:
     hibernate:
       ddl-auto: none

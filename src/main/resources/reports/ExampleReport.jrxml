@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Header_Footer_With_Table" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="7f93f0ad-1f29-485f-8a5d-95df5e0693ab">
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<field name="full_name" class="java.lang.String"/>
+	<field name="date_of_birth" class="java.lang.String"/>
+	<field name="income_source" class="java.lang.String"/>
+	<field name="account_purpose" class="java.lang.String"/>
+	<field name="transaction_frequency" class="java.lang.String"/>
+	<field name="average_balance" class="java.lang.String"/>
+	<field name="additional_services" class="java.lang.String"/>
+	<field name="account_management_preference" class="java.lang.String"/>
+	<field name="specific_requirements" class="java.lang.String"/>
+	<field name="banking_familiarity" class="java.lang.String"/>
+	<pageHeader>
+		<band height="60">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="0" y="20" width="277" height="30" uuid="d536e64b-1361-4fc7-9c3f-647d9df83777"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[STATIC DATA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="277" y="20" width="278" height="30" uuid="60934f0f-d582-41b5-9874-5b89bb445d03"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[STATIC DATA]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="200">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="28626c7c-0f84-47d3-898e-a38826775e97"/>
+				<text><![CDATA[Full Name:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="0" width="200" height="20" uuid="e24965d5-2eda-4b13-9960-620115fcd7c5"/>
+				<textFieldExpression><![CDATA[$F{full_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="100" height="20" uuid="33ca9475-03c7-4c98-b1b6-bafb0ecb4f39"/>
+				<text><![CDATA[Date of Birth:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="20" width="200" height="20" uuid="39cd9f15-b2c5-42b6-8fb5-cbc3bca82ea2"/>
+				<textFieldExpression><![CDATA[$F{date_of_birth}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="40" width="100" height="20" uuid="6d305cab-a93d-4d3d-8873-1c42da2fdbfd"/>
+				<text><![CDATA[Income Source:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="40" width="200" height="20" uuid="3febcf59-eab4-4665-a05d-5c70105fd3a5"/>
+				<textFieldExpression><![CDATA[$F{income_source}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="60" width="100" height="20" uuid="00ca896f-1c33-4e96-b04d-6756f8b0d090"/>
+				<text><![CDATA[Account Purpose:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="60" width="200" height="20" uuid="6bad8274-2fde-44de-a470-fa6fbecac20e"/>
+				<textFieldExpression><![CDATA[$F{account_purpose}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="100" height="20" uuid="9d71d4cd-a7f3-48ee-adb1-4762f74c822c"/>
+				<text><![CDATA[Transaction Frequency:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="80" width="200" height="20" uuid="e50ec8b6-aff2-4cfc-9f7b-15a3c7c3acf2"/>
+				<textFieldExpression><![CDATA[$F{transaction_frequency}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="100" width="100" height="20" uuid="e47258a8-33a2-429c-8033-b436fc4fa99a"/>
+				<text><![CDATA[Average Balance:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="100" width="200" height="20" uuid="f0aa7251-a684-417e-bfac-39aa0d230ebd"/>
+				<textFieldExpression><![CDATA[$F{average_balance}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="120" width="100" height="20" uuid="52f683de-2642-4e66-8465-c82c26cbd7ca"/>
+				<text><![CDATA[Additional Services:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="120" width="200" height="20" uuid="adab8a21-da34-47c0-bca3-ffbf637bb56f"/>
+				<textFieldExpression><![CDATA[$F{additional_services}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="140" width="100" height="20" uuid="05e3730b-0c96-419b-8521-5af378bbb99c"/>
+				<text><![CDATA[Account Management Preference:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="140" width="200" height="20" uuid="4df93c84-5ce3-4943-b534-fd610fc055ae"/>
+				<textFieldExpression><![CDATA[$F{account_management_preference}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="160" width="100" height="20" uuid="a28f814e-6011-4291-a46f-67602850d414"/>
+				<text><![CDATA[Specific Requirements:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="160" width="200" height="20" uuid="86649661-5c65-4f38-9b74-82e920e9594c"/>
+				<textFieldExpression><![CDATA[$F{specific_requirements}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="180" width="100" height="20" uuid="5f1f933d-4560-44f4-80b6-e5b14ee7ef39"/>
+				<text><![CDATA[Banking Familiarity:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="100" y="180" width="200" height="20" uuid="5127a357-a8d7-49da-83fe-a96610777112"/>
+				<textFieldExpression><![CDATA[$F{banking_familiarity}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="40">
+			<staticText>
+				<reportElement x="0" y="0" width="277" height="30" forecolor="#878787" uuid="b0f1f0ad-8c85-4a1d-a2aa-9b3a7fa47c14"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA["Created by userId on date"]]></text>
+			</staticText>
+			<textField evaluationTime="Master">
+				<reportElement x="277" y="0" width="278" height="30" forecolor="#BFBFBF" uuid="7e2d8b9f-4978-4d9f-b4a1-fdb9ff6b14cf"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{MASTER_CURRENT_PAGE} + " / " + $V{MASTER_TOTAL_PAGES}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -65,6 +65,4 @@ public class TaskEntity {
   @Column(name = FORM_DATA, columnDefinition = "json")
   private String formData;
 
-  @Column(name = "custom_task_name") //?
-  private String customTaskName;
 }

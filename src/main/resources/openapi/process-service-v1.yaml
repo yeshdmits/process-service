@@ -72,8 +72,12 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                format: uuid
+                type: object
+                properties:
+                  processInstanceId:
+                    type: string
+                    format: uuid
+
         '400':
           description: Bad request
           content:
@@ -183,6 +187,49 @@ paths:
             application/json:
               schema:
                 $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+  '/process/document':
+    get:
+      tags:
+        - Process
+      operationId: getBinaryData
+      parameters:
+        - name: documentId
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: byte
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '404':
+          description: Content / ID not found
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
 components:
   schemas:
     TaskComplete:
@@ -207,12 +254,18 @@ components:
           format: uuid
         displayName:
           type: string
+        processStatus:
+          type: string
         metadata:
           $ref: '#/components/schemas/Metadata'
         taskList:
           type: array
           items:
             $ref: '#/components/schemas/Task'
+        documentList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
 
     Metadata:
       type: object
@@ -224,6 +277,21 @@ components:
           type: string
         schema:
           type: string
+        customComponentName:
+          type: string
+        componentProps:
+          type: string
+    Document:
+      type: object
+      properties:
+        documentId:
+          type: string
+          format: uuid
+        documentName:
+          type: string
+        documentStatus:
+          type: string
+          enum: [CREATED, SENT, COMPLETED, WITHDRAWN]
     Task:
       type: object
       properties:

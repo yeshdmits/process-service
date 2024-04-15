@@ -19,18 +19,31 @@
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
     <org.projectlombok.lombok.version>1.18.32</org.projectlombok.lombok.version>
     <org.postgresql.version>42.7.3</org.postgresql.version>
-    <org.liquibase.version>4.27.0</org.liquibase.version>
     <org.apache.maven.compiler.version>3.13.0</org.apache.maven.compiler.version>
     <springboot.maven.plugin.version>3.2.4</springboot.maven.plugin.version>
     <com.ibm.mq.version>3.2.4</com.ibm.mq.version>
     <oracle.ojdbc.version>19.3.0.0</oracle.ojdbc.version>
     <openapi.client.generator.version>7.4.0</openapi.client.generator.version>
+    <jasperreports.version>6.21.2</jasperreports.version>
+    <org.springdoc.version>2.3.0</org.springdoc.version>
+    <org.flowable.version>7.0.1</org.flowable.version>
+    <flyway.version>9.17.0</flyway.version>
   </properties>
   <dependencies>
     <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${org.mapstruct.version}</version>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+      <version>${flyway.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.flowable</groupId>
+      <artifactId>flowable-spring-boot-starter</artifactId>
+      <version>${org.flowable.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>net.sf.jasperreports</groupId>
+      <artifactId>jasperreports</artifactId>
+      <version>${jasperreports.version}</version>
     </dependency>
     <dependency>
       <groupId>com.ibm.mq</groupId>
@@ -42,11 +55,10 @@
       <artifactId>spring-boot-starter-logging</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.flowable</groupId>
-      <artifactId>flowable-spring-boot-starter</artifactId>
-      <version>7.0.1</version>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
+      <version>${org.mapstruct.version}</version>
     </dependency>
-
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -61,13 +73,6 @@
       <scope>runtime</scope>
       <version>${org.postgresql.version}</version>
     </dependency>
-
-    <dependency>
-      <groupId>org.liquibase</groupId>
-      <artifactId>liquibase-core</artifactId>
-      <version>${org.liquibase.version}</version>
-    </dependency>
-
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -97,7 +102,7 @@
     <dependency>
       <groupId>org.springdoc</groupId>
       <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-      <version>2.3.0</version>
+      <version>${org.springdoc.version}</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
