@@ -1,8 +1,8 @@
 -- Create table
-CREATE TABLE test_data (
-                           id SERIAL PRIMARY KEY ,
-                           value BOOLEAN DEFAULT FALSE
+create table test_data (
+                           id serial primary key,
+                           value boolean default false
 );
 
 -- Insert data
-INSERT INTO test_data (id, value) VALUES (0, true);
+insert into test_data (id, value) values (0, true);

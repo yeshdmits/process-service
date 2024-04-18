@@ -16,6 +16,43 @@ servers:
 tags:
   - name: Process Service
 paths:
+  '/process/list':
+    get:
+      tags:
+        - Process
+      operationId: fetchProcessList
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessEntityListResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '404':
+          description: Content / ID not found
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+
   '/process/build':
     post:
       tags:
@@ -232,6 +269,23 @@ paths:
                 $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
 components:
   schemas:
+    ProcessEntityListResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          processEntityId:
+            type: string
+            format: uuid
+          displayName:
+            type: string
+          processStatus:
+            type: string
+          modifiedAt:
+            type: string
+            format: datetime
+          modifiedBy:
+            type: string
     TaskComplete:
       type: object
       properties:
@@ -249,6 +303,16 @@ components:
     ProcessEntity:
       type: object
       properties:
+        modifiedAt:
+          type: string
+          format: datetime
+        modifiedBy:
+          type: string
+        createdAt:
+          type: string
+          format: datetime
+        createdBy:
+          type: string
         processEntityId:
           type: string
           format: uuid
@@ -284,6 +348,16 @@ components:
     Document:
       type: object
       properties:
+        modifiedAt:
+          type: string
+          format: datetime
+        modifiedBy:
+          type: string
+        createdAt:
+          type: string
+          format: datetime
+        createdBy:
+          type: string
         documentId:
           type: string
           format: uuid
@@ -291,10 +365,19 @@ components:
           type: string
         documentStatus:
           type: string
-          enum: [CREATED, SENT, COMPLETED, WITHDRAWN]
     Task:
       type: object
       properties:
+        modifiedAt:
+          type: string
+          format: datetime
+        modifiedBy:
+          type: string
+        createdAt:
+          type: string
+          format: datetime
+        createdBy:
+          type: string
         taskId:
           type: string
           format: uuid

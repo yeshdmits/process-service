@@ -6,10 +6,15 @@ import static com.yeshenko.process.domain.entity.ProcessEntity.ProcessEntityColu
 import static com.yeshenko.process.domain.entity.ProcessEntity.ProcessEntityColumn.PROCESS_INSTANCE_ID;
 import static com.yeshenko.process.domain.entity.ProcessEntity.ProcessEntityColumn.TABLE_NAME;
 
+import com.yeshenko.process.domain.audit.Audit;
+import com.yeshenko.process.domain.audit.AuditListener;
+import com.yeshenko.process.domain.audit.Auditable;
 import com.yeshenko.process.domain.enumeration.ProcessStatusEnum;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -33,7 +38,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProcessEntity {
+@EntityListeners(AuditListener.class)
+public class ProcessEntity implements Auditable {
 
   public static class ProcessEntityColumn {
     public static final String TABLE_NAME = "process";
@@ -65,4 +71,7 @@ public class ProcessEntity {
 
   @OneToMany(mappedBy = PROCESS_ENTITY, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Document> documents;
+
+  @Embedded
+  private Audit audit;
 }

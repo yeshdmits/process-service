@@ -5,9 +5,14 @@ import static com.yeshenko.process.domain.entity.Document.DocumentColumn.COLUMN_
 import static com.yeshenko.process.domain.entity.Document.DocumentColumn.PROCESS_ID_FK;
 import static com.yeshenko.process.domain.entity.Document.DocumentColumn.TABLE_NAME;
 
+import com.yeshenko.process.domain.audit.Audit;
+import com.yeshenko.process.domain.audit.AuditListener;
+import com.yeshenko.process.domain.audit.Auditable;
 import com.yeshenko.process.domain.enumeration.DocumentStatusEnum;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +33,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Document {
+@EntityListeners(AuditListener.class)
+public class Document implements Auditable {
 
   public static class DocumentColumn {
 
@@ -58,4 +64,7 @@ public class Document {
   @ManyToOne
   @JoinColumn(name = PROCESS_ID_FK, nullable = false)
   private ProcessEntity processEntity;
+
+  @Embedded
+  private Audit audit;
 }

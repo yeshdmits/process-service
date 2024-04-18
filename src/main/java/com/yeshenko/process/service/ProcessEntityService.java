@@ -17,7 +17,9 @@ import com.yeshenko.process.domain.util.MapUtil;
 import com.yeshenko.process.domain.util.SpecificationUtil;
 import com.yeshenko.process.models.v1.MetadataDto;
 import com.yeshenko.process.models.v1.ProcessEntityDto;
+import com.yeshenko.process.models.v1.ProcessEntityListResponseInnerDto;
 import com.yeshenko.process.models.v1.TaskCompleteDto;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,14 @@ public class ProcessEntityService {
 
     var activeTaskId = workflowService.getActiveTaskId(
         valueOf(processEntity.getProcessInstanceId()));
+
+    processEntity.setTasks(processEntity.getTasks().stream()
+        .sorted((o1, o2) -> o2.getAudit().getModifiedAt().compareTo(o1.getAudit().getModifiedAt()))
+        .toList());
+
+    processEntity.setDocuments(processEntity.getDocuments().stream()
+        .sorted((o1, o2) -> o2.getAudit().getModifiedAt().compareTo(o1.getAudit().getModifiedAt()))
+        .toList());
 
     var toReturn = processMapper.toDto(processEntity);
 //    log
@@ -178,5 +188,12 @@ public class ProcessEntityService {
     processEntity.getDocuments().stream()
         .filter(i -> DocumentStatusEnum.SENT.equals(i.getDocumentStatus()))
         .forEach(i -> i.setDocumentStatus(DocumentStatusEnum.WITHDRAWN));
+  }
+
+  public List<ProcessEntityListResponseInnerDto> fetchProcessEntityList() {
+    var processEntityList = processEntityRepository.findAll().stream()
+        .sorted((o1, o2) -> o2.getAudit().getModifiedAt().compareTo(o1.getAudit().getModifiedAt()))
+        .toList();
+    return processMapper.toDtoList(processEntityList);
   }
 }

@@ -5,13 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.yeshenko.process.config.AbstractIntegrationTest;
+import com.yeshenko.process.domain.enumeration.DocumentStatusEnum;
 import com.yeshenko.process.domain.enumeration.ProcessStatusEnum;
 import com.yeshenko.process.domain.enumeration.TaskStatusEnum;
 import com.yeshenko.process.domain.repository.ProcessDefinitionRepository;
 import com.yeshenko.process.domain.util.MapUtil;
 import com.yeshenko.process.models.v1.CreateProcess200ResponseDto;
 import com.yeshenko.process.models.v1.CreateProcessRequestDto;
-import com.yeshenko.process.models.v1.DocumentDto.DocumentStatusEnum;
 import com.yeshenko.process.models.v1.ProcessEntityDto;
 import com.yeshenko.process.models.v1.TaskCompleteDto;
 import com.yeshenko.process.models.v1.TaskCompleteDto.DecisionEnum;
@@ -89,8 +89,8 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     assertEquals(1, responseGetDistribution.getDocumentList().size());
     assertEquals(TaskStatusEnum.IN_PROGRESS.getValue(),
         responseGetDistribution.getTaskList().get(1).getTaskStatus());
-    assertEquals(DocumentStatusEnum.CREATED.getValue().toLowerCase(),
-        responseGetDistribution.getDocumentList().get(0).getDocumentStatus().getValue().toLowerCase());
+    assertEquals(DocumentStatusEnum.CREATED.getValue(),
+        responseGetDistribution.getDocumentList().get(0).getDocumentStatus());
 
 
 //  Complete Distribution Task Process Instance
@@ -119,7 +119,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     assertEquals(TaskStatusEnum.IN_PROGRESS.getValue(),
         responseGetValidation.getTaskList().get(2).getTaskStatus());
     assertEquals(DocumentStatusEnum.SENT.getValue().toLowerCase(),
-        responseGetValidation.getDocumentList().get(0).getDocumentStatus().getValue().toLowerCase());
+        responseGetValidation.getDocumentList().get(0).getDocumentStatus());
 
 //  Complete Validation Task Process Instance
     var taskCompleteValidationRequest = new TaskCompleteDto()
@@ -150,7 +150,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     assertEquals(3, response.getTaskList().size());
     assertEquals(1, response.getDocumentList().size());
     assertEquals(DocumentStatusEnum.COMPLETED.getValue().toLowerCase(),
-        response.getDocumentList().get(0).getDocumentStatus().getValue().toLowerCase());
+        response.getDocumentList().get(0).getDocumentStatus());
 
   }
 }

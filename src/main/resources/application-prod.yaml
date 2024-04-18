@@ -6,9 +6,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/process
+    url: jdbc:postgresql://${DB_HOST:localhost}:5432/process
     username: process
-    password: passw0rd
+    password: ${DB_KEY}
   jpa:
     hibernate:
       ddl-auto: none

@@ -5,8 +5,10 @@ import com.yeshenko.process.models.v1.BuildProcessRequestDto;
 import com.yeshenko.process.models.v1.CreateProcess200ResponseDto;
 import com.yeshenko.process.models.v1.CreateProcessRequestDto;
 import com.yeshenko.process.models.v1.ProcessEntityDto;
+import com.yeshenko.process.models.v1.ProcessEntityListResponseInnerDto;
 import com.yeshenko.process.models.v1.TaskCompleteDto;
 import com.yeshenko.process.service.ProcessEntityService;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -43,5 +45,10 @@ public class ProcessServiceApiDelegateImpl implements ProcessApiDelegate {
   @Override
   public ResponseEntity<byte[]> getBinaryData(UUID documentId) {
     return ResponseEntity.ok(processEntityService.getDocumentBinaryData(documentId));
+  }
+
+  @Override
+  public ResponseEntity<List<ProcessEntityListResponseInnerDto>> fetchProcessList() {
+    return ResponseEntity.ok(processEntityService.fetchProcessEntityList());
   }
 }

@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 public enum DocumentStatusEnum {
-  CREATED("CREATED"),
-  SENT("SENT"),
-  COMPLETED("COMPLETED"),
-  WITHDRAWN("WITHDRAWN");
+  CREATED("Created"),
+  SENT("Sent"),
+  COMPLETED("Completed"),
+  WITHDRAWN("Withdrawn");
 
   private final String value;
 

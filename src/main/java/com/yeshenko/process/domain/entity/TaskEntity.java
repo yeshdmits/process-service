@@ -7,9 +7,14 @@ import static com.yeshenko.process.domain.entity.TaskEntity.TaskEntityColumn.PRO
 import static com.yeshenko.process.domain.entity.TaskEntity.TaskEntityColumn.TABLE_NAME;
 import static com.yeshenko.process.domain.entity.TaskEntity.TaskEntityColumn.TASK_DEFINITION_ID_FK;
 
+import com.yeshenko.process.domain.audit.Audit;
+import com.yeshenko.process.domain.audit.AuditListener;
+import com.yeshenko.process.domain.audit.Auditable;
 import com.yeshenko.process.domain.enumeration.TaskStatusEnum;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +35,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskEntity {
+@EntityListeners(AuditListener.class)
+public class TaskEntity implements Auditable {
 
   public static class TaskEntityColumn {
     public static final String TABLE_NAME = "task";
@@ -65,4 +71,6 @@ public class TaskEntity {
   @Column(name = FORM_DATA, columnDefinition = "json")
   private String formData;
 
+  @Embedded
+  private Audit audit;
 }
