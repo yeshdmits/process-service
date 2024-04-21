@@ -7,7 +7,7 @@ import com.yeshenko.process.models.v1.CreateProcessRequestDto;
 import com.yeshenko.process.models.v1.ProcessEntityDto;
 import com.yeshenko.process.models.v1.ProcessEntityListResponseInnerDto;
 import com.yeshenko.process.models.v1.TaskCompleteDto;
-import com.yeshenko.process.service.ProcessEntityService;
+import com.yeshenko.process.service.process.ProcessEntityService;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

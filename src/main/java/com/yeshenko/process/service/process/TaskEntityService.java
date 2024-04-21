@@ -1,4 +1,4 @@
-package com.yeshenko.process.service;
+package com.yeshenko.process.service.process;
 
 import static com.yeshenko.process.config.WorkflowConfig.WORKFLOW_VARIABLE_DECISION;
 import static com.yeshenko.process.config.WorkflowConfig.WORKFLOW_VARIABLE_PROCESS_ID;

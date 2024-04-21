@@ -1,4 +1,4 @@
-package com.yeshenko.process.service;
+package com.yeshenko.process.service.process;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

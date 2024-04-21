@@ -1,4 +1,4 @@
-package com.yeshenko.process.service.delegate;
+package com.yeshenko.process.service.flowable.delegate;
 
 import static com.yeshenko.process.config.WorkflowConfig.WORKFLOW_DEFAULT_PROCESS_COMPONENT;
 import static com.yeshenko.process.config.WorkflowConfig.WORKFLOW_VARIABLE_FORM_DATA;
@@ -7,8 +7,8 @@ import static com.yeshenko.process.config.WorkflowConfig.WORKFLOW_VARIABLE_PROCE
 import static java.util.Optional.ofNullable;
 
 import com.yeshenko.process.domain.enumeration.ProcessStatusEnum;
-import com.yeshenko.process.service.PdfReportService;
-import com.yeshenko.process.service.ProcessEntityService;
+import com.yeshenko.process.service.process.PdfReportService;
+import com.yeshenko.process.service.process.ProcessEntityService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.flowable.engine.delegate.DelegateExecution;

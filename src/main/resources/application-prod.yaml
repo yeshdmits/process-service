@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST:localhost}:5432/process
+    url: jdbc:postgresql://${DB_HOST:localhost}:6432/process
     username: process
     password: ${DB_KEY}
   jpa:
@@ -14,7 +14,23 @@ spring:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: sb
+            authorization-grant-type: authorization_code
+            scope:
+              - openid
+            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+        provider:
+          keycloak:
+            issuer-uri: ${KEYCLOAK_ISSUER_URI}
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
 springdoc:
   swagger-ui:
     path: /

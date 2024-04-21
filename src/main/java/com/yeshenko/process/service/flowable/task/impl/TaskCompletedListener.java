@@ -1,7 +1,7 @@
-package com.yeshenko.process.service.listener.task.impl;
+package com.yeshenko.process.service.flowable.task.impl;
 
-import com.yeshenko.process.service.TaskEntityService;
-import com.yeshenko.process.service.listener.task.TaskEventListener;
+import com.yeshenko.process.service.process.TaskEntityService;
+import com.yeshenko.process.service.flowable.task.TaskEventListener;
 import org.flowable.common.engine.api.delegate.event.FlowableEvent;
 import org.flowable.task.api.Task;
 import org.springframework.beans.factory.annotation.Autowired;

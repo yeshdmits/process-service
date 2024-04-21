@@ -11,6 +11,16 @@ services:
     networks:
       - process
     restart: always
+
+  KEYCLOAK:
+    image: quay.io/keycloak/keycloak:24.0.3
+    command: start-dev
+    ports:
+      - "8088:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
 networks:
   process:
     driver: bridge

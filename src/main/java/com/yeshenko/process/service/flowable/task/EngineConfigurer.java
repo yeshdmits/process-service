@@ -1,7 +1,7 @@
-package com.yeshenko.process.service.listener.task;
+package com.yeshenko.process.service.flowable.task;
 
-import com.yeshenko.process.service.listener.task.impl.TaskCompletedListener;
-import com.yeshenko.process.service.listener.task.impl.TaskCreatedListener;
+import com.yeshenko.process.service.flowable.task.impl.TaskCompletedListener;
+import com.yeshenko.process.service.flowable.task.impl.TaskCreatedListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
