@@ -1,10 +1,11 @@
-package com.yeshenko.process.config;
+package com.yeshenko.process.config.security;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -26,6 +27,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@ConditionalOnProperty(name = {"spring.security.type"}, havingValue = "jwt")
 public class JwtSecurityConfig {
 
   private static final String GROUPS = "groups";
@@ -35,11 +37,11 @@ public class JwtSecurityConfig {
   @Bean
   public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(auth -> auth
-        .requestMatchers(new AntPathRequestMatcher("/api/**"))
-        .authenticated()
-        .requestMatchers(new AntPathRequestMatcher("/login"))
-        .permitAll()
-        .anyRequest().permitAll())
+            .requestMatchers(new AntPathRequestMatcher("/api/**"))
+            .authenticated()
+            .requestMatchers(new AntPathRequestMatcher("/login"))
+            .permitAll()
+            .anyRequest().permitAll())
         .cors(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable);
     http.oauth2ResourceServer(oauth2 -> oauth2
@@ -102,6 +104,4 @@ public class JwtSecurityConfig {
     return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role))
         .collect(Collectors.toSet());
   }
-
-
 }

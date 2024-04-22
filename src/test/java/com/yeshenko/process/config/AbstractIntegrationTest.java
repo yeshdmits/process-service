@@ -19,13 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 public abstract class AbstractIntegrationTest {
 
   public static PostgresTestContainer postgres = PostgresTestContainer.getInstance();
-  public static MqTestContainer ibmmq = MqTestContainer.getInstance();
   @Autowired
   protected MockMvc mockMvc;
 
   @BeforeAll
   static void setUp() {
-    ibmmq.start();
     postgres.start();
   }
 }

@@ -4,34 +4,8 @@ server:
     context-path: /
 
 spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/process
-    username: process
-    password: passw0rd
-  jpa:
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-
   security:
-    oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: sb-app
-            authorization-grant-type: authorization_code
-            scope:
-              - openid
-            client-secret: cDD3v2XqWUtIXPb7keLa02AEs21POkqo
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:8088/realms/PSM-Auth
-            user-name-attribute: preferred_username
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8088/realms/PSM-Auth
+    type: none
 springdoc:
   swagger-ui:
     path: /

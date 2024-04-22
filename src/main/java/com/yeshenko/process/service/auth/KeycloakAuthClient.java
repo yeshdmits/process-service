@@ -3,6 +3,7 @@ package com.yeshenko.process.service.auth;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,6 +15,10 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(
+    name = {"spring.security.type"},
+    havingValue = "jwt"
+)
 public class KeycloakAuthClient {
 
   @Value("${spring.security.oauth2.client.registration.keycloak.client-id}")

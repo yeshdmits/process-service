@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
 
-  private static final String CREATE_PROCESS_API_URL = "/api/v1/process";
+  private static final String PROCESS_API_URL = "/api/v1/process";
 
   @Autowired
   private ProcessDefinitionRepository processDefinitionRepository;
@@ -40,7 +40,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
 //  Create Process Instance
     var responseCreate = mockMvc.perform(
         MockMvcRequestBuilders
-            .post(CREATE_PROCESS_API_URL)
+            .post(PROCESS_API_URL)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(MapUtil.serializeObjectToString(request))
     ).andReturn().getResponse().getContentAsString();
@@ -50,7 +50,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
 //  Get Process Instance
     var responseGetConfigurationBody = mockMvc.perform(
         MockMvcRequestBuilders
-            .get(CREATE_PROCESS_API_URL)
+            .get(PROCESS_API_URL)
             .param("processInstanceId", createProcessResponse.getProcessInstanceId().toString())
     ).andReturn().getResponse().getContentAsString();
 
@@ -69,7 +69,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
         .decision(DecisionEnum.COMPLETED);
     mockMvc.perform(
         MockMvcRequestBuilders
-            .put(CREATE_PROCESS_API_URL)
+            .put(PROCESS_API_URL)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(MapUtil.serializeObjectToString(taskConfigurationRequest))
     ).andExpect(MockMvcResultMatchers.status().isOk());
@@ -77,7 +77,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
 //  Get Process Instance
     var responseGetDistributionBody = mockMvc.perform(
         MockMvcRequestBuilders
-            .get(CREATE_PROCESS_API_URL)
+            .get(PROCESS_API_URL)
             .param("processInstanceId", createProcessResponse.getProcessInstanceId().toString())
     ).andReturn().getResponse().getContentAsString();
 
@@ -88,7 +88,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     assertEquals(2, responseGetDistribution.getTaskList().size());
     assertEquals(1, responseGetDistribution.getDocumentList().size());
     assertEquals(TaskStatusEnum.IN_PROGRESS.getValue(),
-        responseGetDistribution.getTaskList().get(1).getTaskStatus());
+        responseGetDistribution.getTaskList().get(0).getTaskStatus());
     assertEquals(DocumentStatusEnum.CREATED.getValue(),
         responseGetDistribution.getDocumentList().get(0).getDocumentStatus());
 
@@ -99,7 +99,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
         .decision(DecisionEnum.COMPLETED);
     mockMvc.perform(
         MockMvcRequestBuilders
-            .put(CREATE_PROCESS_API_URL)
+            .put(PROCESS_API_URL)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(MapUtil.serializeObjectToString(taskCompleteDistributionRequest))
     ).andExpect(MockMvcResultMatchers.status().isOk());
@@ -107,7 +107,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
 //  Get Process Instance
     var responseGetValidationBody = mockMvc.perform(
         MockMvcRequestBuilders
-            .get(CREATE_PROCESS_API_URL)
+            .get(PROCESS_API_URL)
             .param("processInstanceId", createProcessResponse.getProcessInstanceId().toString())
     ).andReturn().getResponse().getContentAsString();
     var responseGetValidation = MapUtil.serializeObjectFromString(responseGetValidationBody, ProcessEntityDto.class);
@@ -117,9 +117,9 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     assertEquals(3, responseGetValidation.getTaskList().size());
     assertEquals(1, responseGetValidation.getDocumentList().size());
     assertEquals(TaskStatusEnum.IN_PROGRESS.getValue(),
-        responseGetValidation.getTaskList().get(2).getTaskStatus());
+        responseGetValidation.getTaskList().get(0).getTaskStatus());
     assertEquals(DocumentStatusEnum.SENT.getValue().toLowerCase(),
-        responseGetValidation.getDocumentList().get(0).getDocumentStatus());
+        responseGetValidation.getDocumentList().get(0).getDocumentStatus().toLowerCase());
 
 //  Complete Validation Task Process Instance
     var taskCompleteValidationRequest = new TaskCompleteDto()
@@ -128,7 +128,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
         .decision(DecisionEnum.COMPLETED);
     mockMvc.perform(
         MockMvcRequestBuilders
-            .put(CREATE_PROCESS_API_URL)
+            .put(PROCESS_API_URL)
             .contentType(MediaType.APPLICATION_JSON_VALUE)
             .content(MapUtil.serializeObjectToString(taskCompleteValidationRequest))
     ).andExpect(MockMvcResultMatchers.status().isOk());
@@ -136,7 +136,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     //  Get Process Instance
     var responseGetActiveBody = mockMvc.perform(
         MockMvcRequestBuilders
-            .get(CREATE_PROCESS_API_URL)
+            .get(PROCESS_API_URL)
             .param("processInstanceId", createProcessResponse.getProcessInstanceId().toString())
     ).andReturn().getResponse().getContentAsString();
 
@@ -149,7 +149,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     assertNull(response.getMetadata());
     assertEquals(3, response.getTaskList().size());
     assertEquals(1, response.getDocumentList().size());
-    assertEquals(DocumentStatusEnum.COMPLETED.getValue().toLowerCase(),
+    assertEquals(DocumentStatusEnum.COMPLETED.getValue(),
         response.getDocumentList().get(0).getDocumentStatus());
 
   }

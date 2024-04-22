@@ -6,32 +6,33 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST:localhost}:6432/process
+    url: jdbc:postgresql://localhost:5432/process
     username: process
-    password: ${DB_KEY}
+    password: passw0rd
   jpa:
     hibernate:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
   security:
     type: jwt
     oauth2:
       client:
         registration:
           keycloak:
-            client-id: sb
+            client-id: sb-app
             authorization-grant-type: authorization_code
             scope:
               - openid
-            client-secret: ${KEYCLOAK_CLIENT_SECRET}
+            client-secret: cDD3v2XqWUtIXPb7keLa02AEs21POkqo
         provider:
           keycloak:
-            issuer-uri: ${KEYCLOAK_ISSUER_URI}
+            issuer-uri: http://localhost:8088/realms/PSM-Auth
             user-name-attribute: preferred_username
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI}
+          issuer-uri: http://localhost:8088/realms/PSM-Auth
 springdoc:
   swagger-ui:
     path: /
