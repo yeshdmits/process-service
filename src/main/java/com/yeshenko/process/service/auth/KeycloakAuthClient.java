@@ -2,6 +2,7 @@ package com.yeshenko.process.service.auth;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import net.sf.jasperreports.util.Base64Util;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpEntity;
@@ -42,7 +43,27 @@ public class KeycloakAuthClient {
     requestBody.add("client_id", clientId);
     requestBody.add("client_secret", clientSecret);
     requestBody.add("username", username);
-    requestBody.add("password", password);
+    requestBody.add("password", new String(Base64Util.decode(password)));
+
+
+    var requestEntity = new HttpEntity<>(requestBody, headers);
+
+    var url = issuerUri + "/protocol/openid-connect/token";
+    ResponseEntity<String> responseEntity = restTemplate
+        .exchange(url, HttpMethod.POST, requestEntity, String.class);
+    return responseEntity.getBody();
+  }
+
+  @SneakyThrows
+  public String refreshToken(String refreshToken) {
+    var headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+    var requestBody = new LinkedMultiValueMap<>();
+    requestBody.add("grant_type", "refresh_token");
+    requestBody.add("client_id", clientId);
+    requestBody.add("client_secret", clientSecret);
+    requestBody.add("refresh_token", refreshToken);
 
     var requestEntity = new HttpEntity<>(requestBody, headers);
 

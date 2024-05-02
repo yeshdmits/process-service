@@ -23,4 +23,9 @@ public class LoginController {
   public ResponseEntity<String> login(@RequestBody LoginRequest loginRequest) {
     return ResponseEntity.ok(keycloakAuthClient.loginUser(loginRequest.getUsername(), loginRequest.getPassword()));
   }
+
+  @PostMapping("/refresh")
+  public ResponseEntity<String> refresh(@RequestBody String refreshToken) {
+    return ResponseEntity.ok(keycloakAuthClient.refreshToken(refreshToken));
+  }
 }
