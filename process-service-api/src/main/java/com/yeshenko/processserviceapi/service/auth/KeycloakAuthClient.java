@@ -43,7 +43,8 @@ public class KeycloakAuthClient {
     requestBody.add("client_id", clientId);
     requestBody.add("client_secret", clientSecret);
     requestBody.add("username", username);
-    requestBody.add("password", new String(Base64Util.decode(password)));
+    requestBody.add("password", password);
+//    requestBody.add("password", new String(Base64Util.decode(password)));
 
 
     var requestEntity = new HttpEntity<>(requestBody, headers);

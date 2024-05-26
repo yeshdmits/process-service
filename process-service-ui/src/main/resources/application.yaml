@@ -1,0 +1,7 @@
+server:
+  port: 8060
+  servlet:
+    context-path: /
+  forward-headers-strategy: native
+  tomcat:
+    use-relative-redirects: true
