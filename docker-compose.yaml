@@ -14,14 +14,14 @@ services:
 
   KEYCLOAK:
     image: quay.io/keycloak/keycloak:24.0.3
-    command: start-dev --import-realm
+    command: start-dev
     ports:
       - "8088:8080"
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-    volumes:
-      - ./realm-local.json:/opt/keycloak/data/import/realm-local.json
+#    volumes:
+#      - ./realm-local.json:/opt/keycloak/data/import/realm-local.json
     networks:
       - process
     restart: always
@@ -38,7 +38,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://FREEPDB1:5432/process
       DB_KEY: passw0rd
       KEYCLOAK_CLIENT_SECRET: AOA1Q29svqRWlrz2jDcxNPT3YrPG0niX
-      KEYCLOAK_ISSUER_URI: http://KEYCLOAK:8080/realms/PSM-Auth
+      KEYCLOAK_ISSUER_URI: http://KEYCLOAK:8080/realms/process-org
     networks:
       - process
 

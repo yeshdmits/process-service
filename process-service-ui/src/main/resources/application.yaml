@@ -5,3 +5,18 @@ server:
   forward-headers-strategy: native
   tomcat:
     use-relative-redirects: true
+spring:
+  security:
+    oauth2:
+        client:
+          registration:
+            keycloak:
+              client-id: process-app
+              authorization-grant-type: authorization_code
+              scope:
+                - openid
+              client-secret: A34iyGqCkPzDWQm478w8vO4q23E4Q3AY
+          provider:
+            keycloak:
+              issuer-uri: http://localhost:8088/realms/process-org
+              user-name-attribute: preferred_username

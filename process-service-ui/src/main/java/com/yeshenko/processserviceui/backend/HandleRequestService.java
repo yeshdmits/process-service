@@ -1,9 +1,12 @@
 package com.yeshenko.processserviceui.backend;
 
 import jakarta.servlet.ServletException;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.function.ServerRequest;
@@ -14,7 +17,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.time.Duration;
-import java.util.List;
 
 @Service
 public class HandleRequestService {
@@ -34,7 +36,7 @@ public class HandleRequestService {
         HttpEntity<?> requestEntity;
 
         try {
-            HttpHeaders httpHeaders = serverRequest.headers().asHttpHeaders();
+            HttpHeaders httpHeaders = obtainHeaders(serverRequest.headers().asHttpHeaders().toSingleValueMap());
             if (serverRequest.method().equals(HttpMethod.GET)) {
                 requestEntity = new HttpEntity<>(httpHeaders);
             } else {
@@ -42,7 +44,6 @@ public class HandleRequestService {
             }
 
             URI uri = buildURI(serverRequest.uri());
-
             ResponseEntity<?> responseEntity = restTemplate.exchange(uri, serverRequest.method(), requestEntity, byte[].class);
 
             var builder = ServerResponse.status(responseEntity.getStatusCode())
@@ -55,6 +56,18 @@ public class HandleRequestService {
         } catch (ServletException | IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private HttpHeaders obtainHeaders(Map<String, String> requestHeaders) {
+        var headers = new HttpHeaders();
+        headers.setAll(requestHeaders);
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            headers.remove("Authorization");
+            DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
+            headers.add("Authorization", "Bearer " + principal.getIdToken().getTokenValue());
+        }
+        return headers;
     }
 
     private URI buildURI(URI uri) {

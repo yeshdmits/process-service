@@ -23,6 +23,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <finalName>process-service-ui</finalName>
@@ -41,9 +49,6 @@
                             <arguments>
                                 <argument>install</argument>
                             </arguments>
-                            <envirinmentVariables>
-                                <APP_VERSION>${project.version}</APP_VERSION>
-                            </envirinmentVariables>
                         </configuration>
                         <goals>
                             <goal>exec</goal>
