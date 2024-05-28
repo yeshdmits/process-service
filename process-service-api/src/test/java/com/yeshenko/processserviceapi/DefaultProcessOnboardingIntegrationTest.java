@@ -10,7 +10,6 @@ import com.yeshenko.processserviceapi.domain.enumeration.ProcessStatusEnum;
 import com.yeshenko.processserviceapi.domain.enumeration.TaskStatusEnum;
 import com.yeshenko.processserviceapi.domain.repository.ProcessDefinitionRepository;
 import com.yeshenko.processserviceapi.domain.util.MapUtil;
-import com.yeshenko.processserviceapi.models.v1.CreateProcess200ResponseDto;
 import com.yeshenko.processserviceapi.models.v1.CreateProcessRequestDto;
 import com.yeshenko.processserviceapi.models.v1.ProcessEntityDto;
 import com.yeshenko.processserviceapi.models.v1.TaskCompleteDto;
@@ -20,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.util.UUID;
 
 class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
 
@@ -45,13 +46,13 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
             .content(MapUtil.serializeObjectToString(request))
     ).andReturn().getResponse().getContentAsString();
 
-    var createProcessResponse = MapUtil.serializeObjectFromString(responseCreate, CreateProcess200ResponseDto.class);
+    var createProcessResponse = UUID.fromString(responseCreate);
 
 //  Get Process Instance
     var responseGetConfigurationBody = mockMvc.perform(
         MockMvcRequestBuilders
             .get(PROCESS_API_URL)
-            .param("processInstanceId", createProcessResponse.getProcessInstanceId().toString())
+            .param("processInstanceId", createProcessResponse.toString())
     ).andReturn().getResponse().getContentAsString();
 
     var responseGetConfiguration = MapUtil.serializeObjectFromString(responseGetConfigurationBody,
@@ -78,7 +79,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     var responseGetDistributionBody = mockMvc.perform(
         MockMvcRequestBuilders
             .get(PROCESS_API_URL)
-            .param("processInstanceId", createProcessResponse.getProcessInstanceId().toString())
+            .param("processInstanceId", createProcessResponse.toString())
     ).andReturn().getResponse().getContentAsString();
 
     var responseGetDistribution = MapUtil.serializeObjectFromString(responseGetDistributionBody, ProcessEntityDto.class);
@@ -108,7 +109,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     var responseGetValidationBody = mockMvc.perform(
         MockMvcRequestBuilders
             .get(PROCESS_API_URL)
-            .param("processInstanceId", createProcessResponse.getProcessInstanceId().toString())
+            .param("processInstanceId", createProcessResponse.toString())
     ).andReturn().getResponse().getContentAsString();
     var responseGetValidation = MapUtil.serializeObjectFromString(responseGetValidationBody, ProcessEntityDto.class);
 
@@ -137,7 +138,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     var responseGetActiveBody = mockMvc.perform(
         MockMvcRequestBuilders
             .get(PROCESS_API_URL)
-            .param("processInstanceId", createProcessResponse.getProcessInstanceId().toString())
+            .param("processInstanceId", createProcessResponse.toString())
     ).andReturn().getResponse().getContentAsString();
 
     var response = MapUtil.serializeObjectFromString(responseGetActiveBody, ProcessEntityDto.class);

@@ -15,7 +15,7 @@ spring:
               authorization-grant-type: authorization_code
               scope:
                 - openid
-              client-secret: A34iyGqCkPzDWQm478w8vO4q23E4Q3AY
+              client-secret: KSCJ8Te7XcZQqhVD7EYYDV1rDdn9E26U
           provider:
             keycloak:
               issuer-uri: http://localhost:8088/realms/process-org

@@ -1,18 +1,23 @@
 package com.yeshenko.processserviceapi.controller.mapper;
 
 import com.yeshenko.processserviceapi.domain.entity.Document;
+import com.yeshenko.processserviceapi.domain.entity.ProcessDefinition;
 import com.yeshenko.processserviceapi.domain.entity.ProcessEntity;
 import com.yeshenko.processserviceapi.domain.entity.TaskEntity;
-import com.yeshenko.processserviceapi.models.v1.DocumentDto;
-import com.yeshenko.processserviceapi.models.v1.ProcessEntityDto;
-import com.yeshenko.processserviceapi.models.v1.ProcessEntityListResponseInnerDto;
-import com.yeshenko.processserviceapi.models.v1.TaskDto;
+import com.yeshenko.processserviceapi.models.v1.*;
+
 import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @Mapper
 public interface ProcessMapper {
+
+  @Mapping(target = "processDefinitionId", source = "id")
+  @Mapping(target = "displayName", source = "displayName")
+  ProcessDefinitionResponseInnerDto toDto(ProcessDefinition entity);
+
+  List<ProcessDefinitionResponseInnerDto> toDtoDefinitionList(List<ProcessDefinition> definitions);
 
   @Mapping(target = "processEntityId", source = "id")
   @Mapping(target = "displayName", source = "entity.processDefinition.displayName")
@@ -35,6 +40,7 @@ public interface ProcessMapper {
   @Mapping(target = "modifiedAt", source = "audit.modifiedAt")
   @Mapping(target = "createdBy", source = "audit.createdBy")
   @Mapping(target = "modifiedBy", source = "audit.modifiedBy")
+  @Mapping(target = "processId", source = "entity.processEntity.id")
   TaskDto toDto(TaskEntity entity);
 
   @Mapping(target = "documentId", source = "id")
@@ -56,4 +62,5 @@ public interface ProcessMapper {
   ProcessEntityListResponseInnerDto toDtoList(ProcessEntity entity);
 
   List<ProcessEntityListResponseInnerDto> toDtoList(List<ProcessEntity> entity);
+
 }

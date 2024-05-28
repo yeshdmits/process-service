@@ -16,6 +16,43 @@ servers:
 tags:
   - name: Process Service
 paths:
+  '/process/definition':
+    get:
+      tags:
+        - Process
+      operationId: fetchDefinitions
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProcessDefinitionResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '404':
+          description: Content / ID not found
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+
   '/process/list':
     get:
       tags:
@@ -109,11 +146,8 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  processInstanceId:
-                    type: string
-                    format: uuid
+                type: string
+                format: uuid
 
         '400':
           description: Bad request
@@ -267,8 +301,60 @@ paths:
             application/json:
               schema:
                 $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+  '/process/task':
+    get:
+      tags:
+        - Process
+      operationId: getTask
+      parameters:
+        - name: taskId
+          in: query
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '404':
+          description: Content / ID not found
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
 components:
   schemas:
+    ProcessDefinitionResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          processDefinitionId:
+            type: string
+            format: uuid
+          displayName:
+            type: string
     ProcessEntityListResponse:
       type: array
       items:
@@ -339,12 +425,6 @@ components:
           format: uuid
         taskName:
           type: string
-        schema:
-          type: string
-        customComponentName:
-          type: string
-        componentProps:
-          type: string
     Document:
       type: object
       properties:
@@ -391,6 +471,11 @@ components:
           type: string
         customTaskName:
           type: string
+        componentProps:
+          type: string
+        processId:
+          type: string
+          format: uuid
     CreateProcessRequest:
       type: object
       properties:

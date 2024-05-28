@@ -1,38 +1,76 @@
 import React, { useEffect, useState } from "react";
 import { Document, Page } from 'react-pdf';
-import { getDocContent } from "../../service/ApiService";
+import { useApiContext } from "../../context/ApiContext";
+import { useNavigate, useSearchParams,createSearchParams } from 'react-router-dom';
+import Header from "../list/Header.component";
+import GoBack from '../../svgs/go-back.svg?react'
 
-const ViewPdfComponent = (props) => {
+const ViewPdfComponent = () => {
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const [numPages, setNumPages] = useState(null);
     const [pageNumber] = useState(1);
     const [pdfUrl, setPdfUrl] = useState(null);
+    const { getDocContent } = useApiContext();
 
     const onDocumentLoadSuccess = (value) => {
         setNumPages(value.numPages);
     }
 
+    const handleBack = () => {
+        if (searchParams.get("taskId")) {
+            navigate({
+                pathName: "/process/overview",
+                search: `?${createSearchParams({ taskId: searchParams.get("taskId") })}`
+            },
+                {
+                    state: {
+                        addProduct: false,
+                        features: false,
+                        process: false,
+                        task: true,
+                        doc: false
+                    }
+                })
+        } else if (searchParams.get("processId")) {
+            navigate({
+                pathName: "/process/overview",
+                search: `?${createSearchParams({ processId: searchParams.get("processId") })}`
+            },
+                {
+                    state: {
+                        addProduct: false,
+                        features: false,
+                        process: true,
+                        task: false,
+                        doc: false
+                    }
+                })
+        }
+    }
+
     useEffect(() => {
         const renderDocument = () => {
-            getDocContent(props.viewDoc.documentId)
+            getDocContent(searchParams.get("docId"))
                 .then((response) => {
                     setPdfUrl(window.URL.createObjectURL(response));
                 })
         }
         renderDocument();
-    }, [props.viewDoc]);
+    }, [searchParams.get("docId")]);
 
     return (
-        <div className="document-pdf">
+        <Header name="Document Overview" elem={<GoBack onClick={handleBack} />}>
             {pdfUrl && <Document
-                className="--scale-factor:0.75 !important"
+                className="text-center"
                 file={pdfUrl}
                 onLoadSuccess={onDocumentLoadSuccess}
             >
-                <Page scale={0.7} pageNumber={pageNumber} />
+                <Page scale={1} pageNumber={pageNumber} />
             </Document>
             }
             <p>Page {pageNumber} of {numPages}</p>
-        </div>
+        </Header>
     );
 }
 
