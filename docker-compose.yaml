@@ -37,8 +37,23 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://FREEPDB1:5432/process
       DB_KEY: passw0rd
-      KEYCLOAK_CLIENT_SECRET: AOA1Q29svqRWlrz2jDcxNPT3YrPG0niX
       KEYCLOAK_ISSUER_URI: http://KEYCLOAK:8080/realms/process-org
+    networks:
+      - process
+
+  UI:
+    image: process-service-ui:0.0.1
+    ports:
+      - "8060:8080"
+    links:
+      - KEYCLOAK
+      - API
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      KEYCLOAK_CLIENT_SECRET: A34iyGqCkPzDWQm478w8vO4q23E4Q3AY
+      KEYCLOAK_ISSUER_URI: http://KEYCLOAK:8088/realms/process-org
+      KEYCLOAK_REDIRECT_URI: http://localhost:8088/realms/process-org/protocol/openid-connect/auth
+      BACKEND_API_URL: http://API:8080
     networks:
       - process
 
