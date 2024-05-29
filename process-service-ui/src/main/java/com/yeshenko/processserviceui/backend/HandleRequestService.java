@@ -2,6 +2,7 @@ package com.yeshenko.processserviceui.backend;
 
 import jakarta.servlet.ServletException;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
@@ -62,9 +63,12 @@ public class HandleRequestService {
         var headers = new HttpHeaders();
         headers.setAll(requestHeaders);
         var authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("Authorization: " + authentication);
         if (authentication != null) {
+            System.out.println("Authorization: " + authentication.getPrincipal());
             headers.remove("Authorization");
             DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
+            System.out.println("Authorization: " + principal.getIdToken().getTokenValue());
             headers.add("Authorization", "Bearer " + principal.getIdToken().getTokenValue());
         }
         return headers;

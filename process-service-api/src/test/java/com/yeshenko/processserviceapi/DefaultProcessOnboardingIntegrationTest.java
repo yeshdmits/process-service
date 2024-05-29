@@ -46,13 +46,13 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
             .content(MapUtil.serializeObjectToString(request))
     ).andReturn().getResponse().getContentAsString();
 
-    var createProcessResponse = UUID.fromString(responseCreate);
+    var createProcessResponse = UUID.fromString(responseCreate.replaceAll("\"", ""));
 
 //  Get Process Instance
     var responseGetConfigurationBody = mockMvc.perform(
         MockMvcRequestBuilders
             .get(PROCESS_API_URL)
-            .param("processInstanceId", createProcessResponse.toString())
+            .param("processEntityId", createProcessResponse.toString())
     ).andReturn().getResponse().getContentAsString();
 
     var responseGetConfiguration = MapUtil.serializeObjectFromString(responseGetConfigurationBody,
@@ -79,7 +79,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     var responseGetDistributionBody = mockMvc.perform(
         MockMvcRequestBuilders
             .get(PROCESS_API_URL)
-            .param("processInstanceId", createProcessResponse.toString())
+            .param("processEntityId", createProcessResponse.toString())
     ).andReturn().getResponse().getContentAsString();
 
     var responseGetDistribution = MapUtil.serializeObjectFromString(responseGetDistributionBody, ProcessEntityDto.class);
@@ -109,7 +109,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     var responseGetValidationBody = mockMvc.perform(
         MockMvcRequestBuilders
             .get(PROCESS_API_URL)
-            .param("processInstanceId", createProcessResponse.toString())
+            .param("processEntityId", createProcessResponse.toString())
     ).andReturn().getResponse().getContentAsString();
     var responseGetValidation = MapUtil.serializeObjectFromString(responseGetValidationBody, ProcessEntityDto.class);
 
@@ -138,7 +138,7 @@ class DefaultProcessOnboardingIntegrationTest extends AbstractIntegrationTest {
     var responseGetActiveBody = mockMvc.perform(
         MockMvcRequestBuilders
             .get(PROCESS_API_URL)
-            .param("processInstanceId", createProcessResponse.toString())
+            .param("processEntityId", createProcessResponse.toString())
     ).andReturn().getResponse().getContentAsString();
 
     var response = MapUtil.serializeObjectFromString(responseGetActiveBody, ProcessEntityDto.class);

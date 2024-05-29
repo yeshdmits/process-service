@@ -16,9 +16,7 @@ const Header = (props) => {
                 </div>
             </div>
         </div>
-        <div className={`transition ease-in-out duration-300 ${show? '-translate-y-1': ''}`}>
         {props.children}
-        </div>
     </>);
 }
 
