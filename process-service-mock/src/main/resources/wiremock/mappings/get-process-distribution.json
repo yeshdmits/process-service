@@ -1,6 +1,6 @@
 {
   "request": {
-    "url": "/api/v1/process/list",
+    "url": "/api/v1/process?processId=c3e82d89-257d-41e0-bc71-e68cd6c15b3f",
     "method": "GET"
   },
   "response": {
@@ -10,6 +10,6 @@
       "Access-Control-Allow-Headers": "Content-Type, Authorization"
     },
     "status": 200,
-    "bodyFileName": "process-list.json"
+    "bodyFileName": "distribution_process/in_progress.json"
   }
 }

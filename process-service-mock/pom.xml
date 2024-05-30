@@ -37,6 +37,62 @@
     </dependency>
   </dependencies>
 
+  <build>
+    <finalName>process-service-mock</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>addWiremockFilesOnBootLevel</id>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <zip destfile="${project.build.directory}/${project.build.finalName}.jar" update="yes" compress="false">
+                  <zipfileset dir="${project.build.directory}/classes/wiremock" prefix="wiremock"/>
+                </zip>
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <from>
+            <image>openjdk:17</image>
+          </from>
+
+          <to>
+            <image>${project.artifactId}:${project.version}</image>
+          </to>
+
+          <container>
+            <jvmFlags>
+              <jvmFlag>-Dfile.encoding=UTF-8</jvmFlag>
+            </jvmFlags>
+          </container>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>install</phase>
+            <goals>
+              <goal>dockerBuild</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
 
 </project>

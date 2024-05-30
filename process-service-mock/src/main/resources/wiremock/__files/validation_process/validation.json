@@ -1,0 +1,14 @@
+{
+  "modifiedAt": "2024-05-30T14:14:23.866",
+  "modifiedBy": "admin",
+  "createdAt": "2024-05-30T14:14:23.866",
+  "createdBy": "admin",
+  "taskId": "23dee828-baf3-478b-8c02-da42775d4602",
+  "taskName": "Validation Task",
+  "taskStatus": "In progress",
+  "content": "{}",
+  "schema": "{\r\n          \"title\": \"Validate Document\",\r\n          \"description\": \"Document validation example\",\r\n          \"type\": \"object\",\r\n          \"properties\": {\r\n            \"decision\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"Provide decision regarding document\",\r\n              \"format\": \"radio\",\r\n              \"enum\": [\r\n                \"Approved\",\r\n                \"Rejected\"\r\n              ]\r\n            },\r\n            \"Comment\": {\r\n              \"type\": \"string\"\r\n            }\r\n          },\r\n          \"if\": {\r\n            \"properties\": {\r\n              \"decision\": {\r\n                \"enum\": [\r\n                  \"Rejected\"\r\n                ]\r\n              }\r\n            }\r\n          },\r\n          \"then\": {\r\n            \"required\": [\r\n              \"Comment\"\r\n            ]\r\n          },\r\n          \"required\": [\r\n            \"decision\"\r\n          ]\r\n        }",
+  "customTaskName": null,
+  "componentProps": null,
+  "processId": "4b252455-63dd-47c7-a21f-f98bec653526"
+}

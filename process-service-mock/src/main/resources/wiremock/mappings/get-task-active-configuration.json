@@ -1,6 +1,6 @@
 {
   "request": {
-    "url": "/api/v1/process/list",
+    "url": "/api/v1/process/task?taskId=4050fc89-224b-4671-abe0-d832481b5f74",
     "method": "GET"
   },
   "response": {
@@ -10,6 +10,6 @@
       "Access-Control-Allow-Headers": "Content-Type, Authorization"
     },
     "status": 200,
-    "bodyFileName": "process-list.json"
+    "bodyFileName": "active_process/configuration.json"
   }
 }

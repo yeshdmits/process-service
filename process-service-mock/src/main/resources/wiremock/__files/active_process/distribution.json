@@ -1,0 +1,14 @@
+{
+  "modifiedAt": "2024-04-19T08:15:23.791",
+  "modifiedBy": "admin",
+  "createdAt": "2024-04-19T08:15:15.973",
+  "createdBy": "admin",
+  "taskId": "5ee0f9a5-ecb8-496c-b44b-07f23cf8da79",
+  "taskName": "Distribution Task",
+  "taskStatus": "Completed",
+  "content": "{}",
+  "schema": null,
+  "customTaskName": "DistributionComponent",
+  "componentProps": "[{\"modifiedAt\":\"2024-05-29T19:36:19.3\",\"modifiedBy\":\"admin\",\"createdAt\":\"2024-05-29T19:35:52.019\",\"createdBy\":\"admin\",\"documentId\":\"c75236b4-061c-4075-b3ae-89fde6f4f999\",\"documentName\":\"Report.pdf\",\"documentStatus\":\"Completed\"}]",
+  "processId": "4692dfe2-2db4-4841-93a8-aa54ce0ada57"
+}

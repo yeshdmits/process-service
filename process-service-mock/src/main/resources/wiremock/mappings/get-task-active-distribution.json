@@ -1,6 +1,6 @@
 {
   "request": {
-    "url": "/api/v1/process/list",
+    "url": "/api/v1/process/task?taskId=5ee0f9a5-ecb8-496c-b44b-07f23cf8da79",
     "method": "GET"
   },
   "response": {
@@ -10,6 +10,6 @@
       "Access-Control-Allow-Headers": "Content-Type, Authorization"
     },
     "status": 200,
-    "bodyFileName": "process-list.json"
+    "bodyFileName": "active_process/distribution.json"
   }
 }

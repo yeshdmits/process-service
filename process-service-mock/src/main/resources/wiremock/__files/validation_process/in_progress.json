@@ -1,65 +1,68 @@
 {
-  "modifiedAt": "2024-04-19T08:15:29.906",
+  "modifiedAt": "2024-05-30T14:14:20.03",
   "modifiedBy": "admin",
-  "createdAt": "2024-04-18T19:13:34.767",
+  "createdAt": "2024-05-30T09:37:09.763",
   "createdBy": "admin",
-  "processEntityId": "4692dfe2-2db4-4841-93a8-aa54ce0ada57",
+  "processEntityId": "4b252455-63dd-47c7-a21f-f98bec653526",
   "displayName": "Default Process",
-  "processStatus": "Active",
-  "metadata": null,
+  "processStatus": "In Progress",
+  "metadata": {
+    "taskId": "23dee828-baf3-478b-8c02-da42775d4602",
+    "taskName": "Validation Task"
+  },
   "taskList": [
     {
-      "modifiedAt": "2024-04-19T08:15:29.849",
+      "modifiedAt": "2024-05-30T14:14:23.866",
       "modifiedBy": "admin",
-      "createdAt": "2024-04-19T08:15:23.83",
+      "createdAt": "2024-05-30T14:14:23.866",
       "createdBy": "admin",
-      "taskId": "639c1a82-9603-4057-9cad-900660a4b837",
+      "taskId": "23dee828-baf3-478b-8c02-da42775d4602",
       "taskName": "Validation Task",
-      "taskStatus": "Completed",
-      "content": "{\"decision\":\"Approved\"}",
+      "taskStatus": "In progress",
+      "content": "{}",
       "schema": "{\r\n          \"title\": \"Validate Document\",\r\n          \"description\": \"Document validation example\",\r\n          \"type\": \"object\",\r\n          \"properties\": {\r\n            \"decision\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"Provide decision regarding document\",\r\n              \"format\": \"radio\",\r\n              \"enum\": [\r\n                \"Approved\",\r\n                \"Rejected\"\r\n              ]\r\n            },\r\n            \"Comment\": {\r\n              \"type\": \"string\"\r\n            }\r\n          },\r\n          \"if\": {\r\n            \"properties\": {\r\n              \"decision\": {\r\n                \"enum\": [\r\n                  \"Rejected\"\r\n                ]\r\n              }\r\n            }\r\n          },\r\n          \"then\": {\r\n            \"required\": [\r\n              \"Comment\"\r\n            ]\r\n          },\r\n          \"required\": [\r\n            \"decision\"\r\n          ]\r\n        }",
       "customTaskName": null,
       "componentProps": null,
-      "processId": "4692dfe2-2db4-4841-93a8-aa54ce0ada57"
+      "processId": "4b252455-63dd-47c7-a21f-f98bec653526"
     },
     {
-      "modifiedAt": "2024-04-19T08:15:23.791",
+      "modifiedAt": "2024-05-30T14:14:23.827",
       "modifiedBy": "admin",
-      "createdAt": "2024-04-19T08:15:15.973",
+      "createdAt": "2024-05-30T14:14:20.038",
       "createdBy": "admin",
-      "taskId": "5ee0f9a5-ecb8-496c-b44b-07f23cf8da79",
+      "taskId": "c3b5ae8d-66bd-4dbd-85d1-53ffce6c44b3",
       "taskName": "Distribution Task",
       "taskStatus": "Completed",
       "content": "{}",
       "schema": null,
       "customTaskName": "DistributionComponent",
-      "componentProps": null,
-      "processId": "4692dfe2-2db4-4841-93a8-aa54ce0ada57"
+      "componentProps": "[{\"modifiedAt\":\"2024-05-29T19:36:19.3\",\"modifiedBy\":\"admin\",\"createdAt\":\"2024-05-29T19:35:52.019\",\"createdBy\":\"admin\",\"documentId\":\"c75236b4-061c-4075-b3ae-89fde6f4f999\",\"documentName\":\"Report.pdf\",\"documentStatus\":\"Completed\"}]",
+      "processId": "4b252455-63dd-47c7-a21f-f98bec653526"
     },
     {
-      "modifiedAt": "2024-04-19T08:15:15.828",
+      "modifiedAt": "2024-05-30T14:14:19.994",
       "modifiedBy": "admin",
-      "createdAt": "2024-04-18T19:13:34.822",
+      "createdAt": "2024-05-30T09:37:09.812",
       "createdBy": "admin",
-      "taskId": "4050fc89-224b-4671-abe0-d832481b5f74",
+      "taskId": "1bf259f4-a60a-4387-b843-b718f0eefa87",
       "taskName": "Configuration Task",
       "taskStatus": "Completed",
-      "content": "{\"full_name\":\"asdqw\",\"date_of_birth\":\"0123-03-12\",\"income_source\":\"Business ownership\",\"account_purpose\":\"Investment opportunities\",\"transaction_frequency\":\"Monthly\",\"average_balance\":\">$10,000\",\"additional_services\":\"Other\",\"account_management_preference\":\"Mobile app\",\"specific_requirements\":\"Access to ATMs\",\"banking_familiarity\":\"Advanced\"}",
+      "content": "{\"full_name\":\"Dmitry Yeshenko\",\"date_of_birth\":\"2000-07-21\",\"income_source\":\"Employment\",\"account_purpose\":\"Checking for daily transactions\",\"transaction_frequency\":\"Daily\",\"average_balance\":\">$10,000\",\"additional_services\":\"Credit cards\",\"account_management_preference\":\"Mobile app\",\"specific_requirements\":\"No monthly fees\",\"banking_familiarity\":\"Intermediate\"}",
       "schema": "{\r\n          \"type\": \"object\",\r\n          \"properties\": {\r\n            \"full_name\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"What is your full name?\"\r\n            },\r\n            \"date_of_birth\": {\r\n              \"type\": \"string\",\r\n              \"format\": \"date\",\r\n              \"title\": \"What is your date of birth?\"\r\n            },\r\n            \"income_source\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"What is your primary source of income?\",\r\n              \"enum\": [\r\n                \"Employment\",\r\n                \"Business ownership\",\r\n                \"Investments\",\r\n                \"Other\"\r\n              ]\r\n            },\r\n            \"account_purpose\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"What is the purpose of opening this account?\",\r\n              \"enum\": [\r\n                \"Personal savings\",\r\n                \"Checking for daily transactions\",\r\n                \"Investment opportunities\",\r\n                \"Other\"\r\n              ]\r\n            },\r\n            \"transaction_frequency\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"How often do you expect to make transactions on this account?\",\r\n              \"enum\": [\r\n                \"Daily\",\r\n                \"Weekly\",\r\n                \"Monthly\",\r\n                \"Rarely\"\r\n              ]\r\n            },\r\n            \"average_balance\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"What is your estimated average account balance?\",\r\n              \"enum\": [\r\n                \"<$1,000\",\r\n                \"$1,000 - $5,000\",\r\n                \"$5,000 - $10,000\",\r\n                \">$10,000\"\r\n              ]\r\n            },\r\n            \"additional_services\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"Are you interested in additional banking services?\",\r\n              \"enum\": [\r\n                \"Credit cards\",\r\n                \"Loans\",\r\n                \"Investment advisory\",\r\n                \"Other\"\r\n              ]\r\n            },\r\n            \"account_management_preference\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"How do you prefer to manage your account?\",\r\n              \"enum\": [\r\n                \"Online banking\",\r\n                \"In-person visits\",\r\n                \"Mobile app\",\r\n                \"Other\"\r\n              ]\r\n            },\r\n            \"specific_requirements\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"Do you have any specific requirements or preferences for this account?\",\r\n              \"enum\": [\r\n                \"Interest-bearing\",\r\n                \"No monthly fees\",\r\n                \"Access to ATMs\",\r\n                \"Other\"\r\n              ]\r\n            },\r\n            \"banking_familiarity\": {\r\n              \"type\": \"string\",\r\n              \"title\": \"What is your familiarity with banking products and services?\",\r\n              \"enum\": [\r\n                \"Basic\",\r\n                \"Intermediate\",\r\n                \"Advanced\",\r\n                \"Limited\"\r\n              ]\r\n            }\r\n          },\r\n          \"required\": [\r\n            \"full_name\",\r\n            \"date_of_birth\",\r\n            \"income_source\",\r\n            \"account_purpose\",\r\n            \"transaction_frequency\",\r\n            \"average_balance\",\r\n            \"account_management_preference\",\r\n            \"banking_familiarity\"\r\n          ]\r\n        }",
       "customTaskName": null,
       "componentProps": null,
-      "processId": "4692dfe2-2db4-4841-93a8-aa54ce0ada57"
+      "processId": "4b252455-63dd-47c7-a21f-f98bec653526"
     }
   ],
   "documentList": [
     {
-      "modifiedAt": "2024-04-19T08:15:30.015",
+      "modifiedAt": "2024-05-30T14:14:23.888",
       "modifiedBy": "admin",
-      "createdAt": "2024-04-19T08:15:15.965",
+      "createdAt": "2024-05-30T14:14:20.033",
       "createdBy": "admin",
-      "documentId": "a3458951-4837-4178-b64d-1c7ad04ddd06",
+      "documentId": "1ea7e8c2-47c8-43fb-80fa-f51ec41011f4",
       "documentName": "Report.pdf",
-      "documentStatus": "Completed"
+      "documentStatus": "Sent"
     }
   ]
 }

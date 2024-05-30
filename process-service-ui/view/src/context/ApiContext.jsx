@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import axios from 'axios';
+const isDevEnv = import.meta.env.DEV;
 
 const ApiContext = createContext(null);
 
@@ -8,8 +9,7 @@ export const useApiContext = () => {
 }
 
 const getBackendUrl = () => {
-    return "/backend"
-    // return "http://localhost:8080"
+    return isDevEnv ? "http://localhost:8081" : "/backend"
 }
 
 export const ApiContextProvider = ({ children }) => {

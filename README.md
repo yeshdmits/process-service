@@ -43,3 +43,21 @@ docker-compose up -d API UI
 ***
 ### 5. Access the Application
 - Open your web browser and connect to http://localhost.
+
+*******
+*******
+*******
+## Setup Frontend Development Environment
+***
+### 1. Start Mock Container
+- Next, start the Keycloak and database containers using Docker Compose:
+```shell
+docker-compose up -d MOCK
+```
+***
+### 2. Run Vite+React Development Mode
+- Next, start the Keycloak and database containers using Docker Compose:
+```shell
+npm run dev
+```
+*********************

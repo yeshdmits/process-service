@@ -41,7 +41,7 @@ services:
       SPRING_PROFILES_ACTIVE: prod
       SPRING_DATASOURCE_URL: jdbc:postgresql://FREEPDB1:5432/process
       DB_KEY: passw0rd
-      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/process-org
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080
     networks:
       - process
 
@@ -63,6 +63,11 @@ services:
     networks:
       - process
 
+  MOCK:
+    container_name: process-service-mock
+    image: process-service-mock:0.0.1
+    ports:
+      - "8081:8080"
 
 networks:
   process:
