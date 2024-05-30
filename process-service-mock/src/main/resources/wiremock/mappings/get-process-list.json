@@ -1,0 +1,10 @@
+{
+  "request": {
+    "url": "/api/v1/process/list",
+    "method": "GET"
+  },
+  "response": {
+    "status": 200,
+    "bodyFileName": "br-purpose/br-purposes-approval-information_response.json"
+  }
+}

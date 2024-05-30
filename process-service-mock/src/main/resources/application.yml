@@ -1,1 +1,5 @@
-spring.application.name=process-service-mock
+spring:
+  main:
+    web-application-type: none
+wiremock:
+  enabled: true

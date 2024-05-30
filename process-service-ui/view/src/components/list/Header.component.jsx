@@ -16,7 +16,7 @@ const Header = (props) => {
                 </div>
             </div>
         </div>
-        {props.children}
+        {show && props.children}
     </>);
 }
 
