@@ -1,0 +1,23 @@
+{
+  "request": {
+    "url": "/api/v1/process",
+    "method": "POST",
+    "bodyPatterns": [
+      {
+        "equalToJson": {
+          "processDefinitionId": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+        },
+        "contains": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      }
+    ]
+  },
+  "response": {
+    "headers": {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type, Authorization"
+    },
+    "status": 200,
+    "body": "70cc5149-5193-4244-9596-adea969f36fd"
+  }
+}

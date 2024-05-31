@@ -1,6 +1,5 @@
-version: '3'
 services:
-  FREEPDB1:
+  DB:
     container_name: process-service-data
     image: postgres:16.2
     environment:
@@ -33,13 +32,13 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - FREEPDB1
+      - DB
     links:
-      - FREEPDB1
+      - DB
       - KEYCLOAK
     environment:
       SPRING_PROFILES_ACTIVE: prod
-      SPRING_DATASOURCE_URL: jdbc:postgresql://FREEPDB1:5432/process
+      SPRING_DATASOURCE_URL: jdbc:postgresql://DB:5432/process
       DB_KEY: passw0rd
       KEYCLOAK_ISSUER_URI: http://keycloak:8080
     networks:

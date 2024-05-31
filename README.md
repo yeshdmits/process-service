@@ -10,9 +10,9 @@ mvn clean install
 ```
 ***
 ### 2. Start Keycloak and Database Containers
-- Next, start the Keycloak and database containers using Docker Compose:
+- Next, start the auth and database containers using Docker Compose:
 ```shell
-docker-compose up -d KEYCLOAK FREEPDB1
+docker-compose up -d KEYCLOAK DB
 ```
 ***
 ### 3. Configure OAuth2 Flow
@@ -44,20 +44,36 @@ docker-compose up -d API UI
 ### 5. Access the Application
 - Open your web browser and connect to http://localhost.
 
-*******
-*******
-*******
-## Setup Frontend Development Environment
 ***
-### 1. Start Mock Container
-- Next, start the Keycloak and database containers using Docker Compose:
+***
+***
+***
+## Fullstack Development Setup
+### 1. Build the Project
+- First, clean and build the projects using Maven:
 ```shell
-docker-compose up -d MOCK
+mvn clean install -f process-service-ui/pom.xml
+```
+```shell
+mvn clean install -f process-service-api/pom.xml
 ```
 ***
-### 2. Run Vite+React Development Mode
+### 2. Start Keycloak and Database Containers
+- Next, start the auth and database containers using Docker Compose:
+```shell
+docker-compose up -d KEYCLOAK DB
+```
+***
+### 3. Run Frontend
+- Next, start the Frontend Application:
+```shell
+mvn spring-boot:run -f process-service-ui/pom.xml
+```
+### 3. Run Backend
 - Next, start the Keycloak and database containers using Docker Compose:
 ```shell
-npm run dev
+mvn spring-boot:run -f process-service-api/pom.xml
 ```
-*********************
+***
+### 4. Access the Application
+- Open your web browser and connect to http://localhost:8060.

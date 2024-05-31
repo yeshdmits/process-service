@@ -1,7 +1,12 @@
 {
   "request": {
-    "url": "/api/v1/process/task?taskId=05eb1b92-d28f-4ae2-9029-cd38212100c6",
-    "method": "GET"
+    "url": "/api/v1/process",
+    "method": "PUT",
+    "bodyPatterns": [
+      {
+        "contains": "52898f05-77e7-4501-9723-aa9e714427d3"
+      }
+    ]
   },
   "response": {
     "headers": {
@@ -9,7 +14,6 @@
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type, Authorization"
     },
-    "status": 200,
-    "bodyFileName": "distribution_process/distribution.json"
+    "status": 200
   }
 }

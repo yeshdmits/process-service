@@ -27,7 +27,7 @@ const TaskList = ({ taskList, handleViewTask }) => {
     return (
         <>
             <Header name={"Task Overview"}>
-                <List header={["Task Name", "Last Action", "Updated By", "Resolution"]} items={items} />
+                <List header={["Name", "Last Action", "Updated By", "Resolution"]} items={items} />
             </Header>
         </>
     );

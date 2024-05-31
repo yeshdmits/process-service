@@ -6,13 +6,15 @@ const Header = (props) => {
     const [show, setShow] = useState(true);
 
     return (<>
-        <div className="flex items-center sticky top-0">
-            <div className="bg-slate-100 hover:bg-slate-200 hover:cursor-pointer ">{props.elem != null && props.elem}</div>
-            <div className="p-2 flex grow justify-between items-center text-2xl bg-slate-100 hover:cursor-pointer hover:bg-slate-200"
+        <div className="flex bg-sky-600 items-center sticky top-0">
+            <div className="hover:bg-sky-500 rounded-full hover:cursor-pointer ">
+                {props.elem != null && props.elem}
+            </div>
+            <div className="p-2 px-5 flex grow justify-between items-center text-2xl rounded-full hover:cursor-pointer hover:bg-sky-500 hover:text-black text-white"
                 onClick={() => setShow(!show)} >
                 <div>{props.name}</div>
                 <div>
-                    {show ? <Close /> : <Open />}
+                    {show ? <Close stroke="#fff" /> : <Open stroke="#fff" />}
                 </div>
             </div>
         </div>

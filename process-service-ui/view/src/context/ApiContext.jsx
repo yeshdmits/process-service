@@ -75,6 +75,21 @@ export const ApiContextProvider = ({ children }) => {
                 // throw new CustomError(error.message, error.status);
             });
     }
+    const handleDownloadDocument = (doc) => {
+        getDocContent(doc.documentId)
+            .then((response) => {
+                window.URL.createObjectURL(response);
+                const blobUrl = window.URL.createObjectURL(response);
+                const link = document.createElement('a');
+                link.href = blobUrl;
+                link.download = doc.documentName;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(blobUrl);
+            })
+    }
+
 
     useEffect(() => { }, [])
 
@@ -86,7 +101,8 @@ export const ApiContextProvider = ({ children }) => {
             getAddProduct,
             completeTask,
             getDocContent,
-            getTask
+            getTask,
+            handleDownloadDocument
         }}>
             {children}
         </ApiContext.Provider>

@@ -54,7 +54,7 @@ const ProcessMain = () => {
 
     return (
         <>
-            <div className="mx-2 grid md:grid-cols-2 sm:grid-cols-1 overflow-hidden justify-around">
+            <div className="grid md:grid-cols-2 sm:grid-cols-1 overflow-hidden justify-around">
                 <div className={`md:flex ${features ? 'sm:flex' : 'sm:hidden'} flex-col justify-around w-full`}>
                     <div className="grow">
                         <ProcessList />

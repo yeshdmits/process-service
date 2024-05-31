@@ -31,6 +31,8 @@ const ProcessOverview = () => {
                 }
             });
     }
+
+
     const handleViewDocument = (doc) => {
         navigate({
             pathName: "/",
@@ -70,15 +72,16 @@ const ProcessOverview = () => {
         const fetchDataFromApi = async () => {
             const fetchedData = await getProduct(searchParams.get("processId"));
             setProcessData(fetchedData);
-            console.log(fetchedData)
         };
 
-        fetchDataFromApi();
+        if (searchParams.get("processId")) {
+            fetchDataFromApi();
+        }
     }, [searchParams.get("processId")]);
 
     return (
         <Header name={processData.displayName} elem={<GoBack onClick={handleClose} />}>
-            <div className="bg-neutral-100">
+            <div className="mt-1 grid gap-1">
                 {processData.metadata &&
                     <div className={Button}
                         onClick={() => handleTaskComplete(processData.metadata.taskId)}>
@@ -88,8 +91,7 @@ const ProcessOverview = () => {
                 <div>
                     <ActivationStatus status={processData.processStatus} />
                 </div>
-                <div className="product-summary">
-                </div>
+                {/* <div className="product-summary"></div> */}
                 <div>
                     <TaskList handleViewTask={handleViewTask} taskList={processData.taskList} />
                 </div>

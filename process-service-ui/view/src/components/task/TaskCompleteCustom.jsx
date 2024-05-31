@@ -2,12 +2,15 @@ import React from "react";
 import { useNavigate, createSearchParams } from 'react-router-dom';
 import { formatDate } from "../../service/Utils";
 import List, { ListRow, ListCell } from "../list/List.component";
+import { DocItems } from "../list/DocumentList";
 import { Button } from "./TaskOverview";
-
+import Download from "../../svgs/download.svg?react";
+import { useApiContext } from "../../context/ApiContext";
 
 const TaskCompleteCustom = ({ task, submitTask, readOnly }) => {
     const componentProps = JSON.parse(task.componentProps);
     const navigate = useNavigate()
+    const { handleDownloadDocument } = useApiContext()
     const handleSubmit = () => {
         if (readOnly) {
             return
@@ -30,25 +33,11 @@ const TaskCompleteCustom = ({ task, submitTask, readOnly }) => {
                 }
             })
     }
-    const items = componentProps && componentProps.map((doc, id) =>
-        <div key={id} onClick={() => renderDocument(doc)} className={ListRow}>
-
-            <div className={ListCell}>
-                {doc.documentName}
-            </div>
-            <div className={ListCell}>
-                {formatDate(doc.modifiedAt)}
-            </div>
-            <div className={ListCell}>
-                {doc.modifiedBy}
-            </div>
-        </div>
-    )
 
 
     return (
         <>
-            <List header={[]} items={items} />
+            <List header={["Documents to Distribute"]} items={DocItems(componentProps, renderDocument)} />
             <div className={Button}
                 onClick={handleSubmit}>
                 Submit
