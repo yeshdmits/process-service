@@ -56,4 +56,9 @@ public class ProcessServiceApiDelegateImpl implements ProcessApiDelegate {
   public ResponseEntity<TaskDto> getTask(UUID taskId) {
     return ResponseEntity.ok(processEntityService.getTask(taskId));
   }
+
+  @Override
+  public ResponseEntity<PageableDto> getFilteredProcesses(ProcessFilterDto processFilterDto) {
+    return ResponseEntity.ok(processEntityService.getFilteredProcesses(processFilterDto));
+  }
 }

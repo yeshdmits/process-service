@@ -1,40 +1,25 @@
 package com.yeshenko.processserviceapi.domain.entity;
 
-import static com.yeshenko.processserviceapi.domain.entity.Document.DocumentColumn.COLUMN_NAME;
-import static com.yeshenko.processserviceapi.domain.entity.Document.DocumentColumn.COLUMN_STATUS;
-import static com.yeshenko.processserviceapi.domain.entity.Document.DocumentColumn.PROCESS_ID_FK;
-import static com.yeshenko.processserviceapi.domain.entity.Document.DocumentColumn.TABLE_NAME;
-
-import com.yeshenko.processserviceapi.domain.audit.Audit;
-import com.yeshenko.processserviceapi.domain.audit.AuditListener;
-import com.yeshenko.processserviceapi.domain.audit.Auditable;
 import com.yeshenko.processserviceapi.domain.enumeration.DocumentStatusEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.envers.Audited;
+
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import static com.yeshenko.processserviceapi.domain.entity.Document.DocumentColumn.*;
 
 @Entity
 @Table(name = TABLE_NAME)
-@Data
-@Builder
+@Audited
+@Builder(toBuilder = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditListener.class)
-public class Document implements Auditable {
+@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
+public class Document extends UpdateAuditableEntity {
 
   public static class DocumentColumn {
 
@@ -42,6 +27,7 @@ public class Document implements Auditable {
     public static final String PROCESS_ID_FK = "process_id_fk";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_STATUS = "status";
+    public static final String COLUMN_CONTENT = "content";
 
     private DocumentColumn() {
     }
@@ -58,13 +44,11 @@ public class Document implements Auditable {
   @Enumerated(EnumType.STRING)
   private DocumentStatusEnum documentStatus;
 
-  @Column(name = "content", columnDefinition = "bytea")
+  @Column(name = COLUMN_CONTENT, columnDefinition = "bytea")
   private byte[] content;
 
   @ManyToOne
   @JoinColumn(name = PROCESS_ID_FK, nullable = false)
   private ProcessEntity processEntity;
 
-  @Embedded
-  private Audit audit;
 }

@@ -4,6 +4,17 @@ server:
     context-path: /
 
 spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      org.hibernate.envers:
+        audit_table_prefix: z_aud_
+        audit_table_suffix: ''
+        revision_field_name: rev
+        revision_type_field_name: revtype
   security:
     type: none
 springdoc:

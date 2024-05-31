@@ -5,7 +5,7 @@ import static com.yeshenko.processserviceapi.config.WorkflowConfig.WORKFLOW_VARI
 
 import com.yeshenko.processserviceapi.domain.entity.TaskEntity;
 import com.yeshenko.processserviceapi.domain.enumeration.TaskStatusEnum;
-import com.yeshenko.processserviceapi.domain.repository.ProcessEntityRepository;
+import com.yeshenko.processserviceapi.domain.repository.custom.ProcessEntityRepository;
 import com.yeshenko.processserviceapi.domain.repository.TaskDefinitionRepository;
 import com.yeshenko.processserviceapi.domain.repository.TaskEntityRepository;
 import java.util.UUID;

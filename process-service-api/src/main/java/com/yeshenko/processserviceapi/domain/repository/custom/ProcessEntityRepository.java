@@ -1,4 +1,4 @@
-package com.yeshenko.processserviceapi.domain.repository;
+package com.yeshenko.processserviceapi.domain.repository.custom;
 
 import com.yeshenko.processserviceapi.domain.entity.ProcessEntity;
 import java.util.UUID;
@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProcessEntityRepository extends JpaRepository<ProcessEntity, UUID>,
-    JpaSpecificationExecutor<ProcessEntity> {
+    JpaSpecificationExecutor<ProcessEntity>, CustomProcessEntityRepository {
 
 }

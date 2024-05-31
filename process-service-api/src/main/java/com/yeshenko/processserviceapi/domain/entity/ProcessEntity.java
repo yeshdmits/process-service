@@ -1,45 +1,26 @@
 package com.yeshenko.processserviceapi.domain.entity;
 
-import static com.yeshenko.processserviceapi.domain.entity.ProcessEntity.ProcessEntityColumn.COLUMN_STATUS;
-import static com.yeshenko.processserviceapi.domain.entity.ProcessEntity.ProcessEntityColumn.PROCESS_DEFINITION_ID_FK;
-import static com.yeshenko.processserviceapi.domain.entity.ProcessEntity.ProcessEntityColumn.PROCESS_ENTITY;
-import static com.yeshenko.processserviceapi.domain.entity.ProcessEntity.ProcessEntityColumn.PROCESS_INSTANCE_ID;
-import static com.yeshenko.processserviceapi.domain.entity.ProcessEntity.ProcessEntityColumn.TABLE_NAME;
-
-import com.yeshenko.processserviceapi.domain.audit.Audit;
-import com.yeshenko.processserviceapi.domain.audit.AuditListener;
-import com.yeshenko.processserviceapi.domain.audit.Auditable;
 import com.yeshenko.processserviceapi.domain.enumeration.ProcessStatusEnum;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.envers.Audited;
+
 import java.util.List;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import static com.yeshenko.processserviceapi.domain.entity.ProcessEntity.ProcessEntityColumn.*;
 
 @Entity
 @Table(name = TABLE_NAME)
-@Data
-@Builder
+@Audited
+@Builder(toBuilder = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditListener.class)
-public class ProcessEntity implements Auditable {
+@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
+public class ProcessEntity extends UpdateAuditableEntity {
 
   public static class ProcessEntityColumn {
     public static final String TABLE_NAME = "process";
@@ -72,6 +53,4 @@ public class ProcessEntity implements Auditable {
   @OneToMany(mappedBy = PROCESS_ENTITY, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private List<Document> documents;
 
-  @Embedded
-  private Audit audit;
 }

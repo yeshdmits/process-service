@@ -1,6 +1,7 @@
 package com.yeshenko.processserviceapi.service.process;
 
 import static com.yeshenko.processserviceapi.config.WorkflowConfig.WORKFLOW_VARIABLE_FORM_DATA;
+import static com.yeshenko.processserviceapi.domain.util.SpecificationUtil.*;
 import static java.lang.String.valueOf;
 
 import com.yeshenko.processserviceapi.controller.mapper.ProcessMapper;
@@ -11,16 +12,23 @@ import com.yeshenko.processserviceapi.domain.enumeration.ProcessStatusEnum;
 import com.yeshenko.processserviceapi.domain.enumeration.TaskStatusEnum;
 import com.yeshenko.processserviceapi.domain.repository.DocumentRepository;
 import com.yeshenko.processserviceapi.domain.repository.ProcessDefinitionRepository;
-import com.yeshenko.processserviceapi.domain.repository.ProcessEntityRepository;
+import com.yeshenko.processserviceapi.domain.repository.custom.ProcessEntityRepository;
 import com.yeshenko.processserviceapi.domain.repository.TaskEntityRepository;
 import com.yeshenko.processserviceapi.domain.util.MapUtil;
 import com.yeshenko.processserviceapi.domain.util.SpecificationUtil;
 import com.yeshenko.processserviceapi.models.v1.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,11 +58,11 @@ public class ProcessEntityService {
                 valueOf(processEntity.getProcessInstanceId()));
 
         processEntity.setTasks(processEntity.getTasks().stream()
-                .sorted((o1, o2) -> o2.getAudit().getModifiedAt().compareTo(o1.getAudit().getModifiedAt()))
+                .sorted((o1, o2) -> o2.getUpdatedAt().compareTo(o1.getUpdatedAt()))
                 .toList());
 
         processEntity.setDocuments(processEntity.getDocuments().stream()
-                .sorted((o1, o2) -> o2.getAudit().getModifiedAt().compareTo(o1.getAudit().getModifiedAt()))
+                .sorted((o1, o2) -> o2.getUpdatedAt().compareTo(o1.getUpdatedAt()))
                 .toList());
 
         var toReturn = processMapper.toDto(processEntity);
@@ -176,7 +184,7 @@ public class ProcessEntityService {
 
     public List<ProcessEntityListResponseInnerDto> fetchProcessEntityList() {
         var processEntityList = processEntityRepository.findAll().stream()
-                .sorted((o1, o2) -> o2.getAudit().getModifiedAt().compareTo(o1.getAudit().getModifiedAt()))
+                .sorted((o1, o2) -> o2.getUpdatedAt().compareTo(o1.getUpdatedAt()))
                 .toList();
         return processMapper.toDtoList(processEntityList);
     }
@@ -202,4 +210,49 @@ public class ProcessEntityService {
         return toReturn
                 .componentProps(MapUtil.serializeObjectToString(documentList));
     }
+
+    public PageableDto getFilteredProcesses(ProcessFilterDto filterDto) {
+        PageableDto pageableDto = new PageableDto();
+
+        var sorting = Optional.ofNullable(filterDto.getPage().getSortBy())
+                .map(sortField -> getSort(sortField, filterDto.getPage().getOrder().getValue()))
+                .orElse(getDefaultSort());
+        Pageable pageable = PageRequest.of(filterDto.getPage().getPage(), filterDto.getPage().getSize(), sorting);
+        Specification<ProcessEntity> spec = Specification.where((root, query, criteriaBuilder) ->
+                criteriaBuilder.conjunction());
+        if (filterDto.getFilters() != null) {
+            for (var filter: filterDto.getFilters()) {
+                spec.and(addCriteria(filter.getField(), filter.getValue(), filter.getCriteria().getValue()));
+            }
+        }
+
+        Page<ProcessEntity> entityPage = processEntityRepository.findAll(spec, pageable);
+
+        pageableDto.setTotalItems((int) entityPage.getTotalElements());
+        pageableDto.setTotalPages(entityPage.getTotalPages());
+        pageableDto.setPage(entityPage.getNumber());
+        pageableDto.setSize(entityPage.getNumberOfElements());
+
+        sorting.get().findFirst().ifPresent(i -> pageableDto.setSortBy(i.getProperty()));
+        sorting.get().findFirst().ifPresent(i -> pageableDto.setOrder(i.getDirection().name()));
+
+        processEntityRepository.findColumns(spec).forEach((column, values) -> {
+            var grid = new GridColumnDto();
+            grid.setColumnName(column);
+            var criteriaIn = new GridColumnCriteriaListInnerDto();
+            criteriaIn.setCriteriaType(GridColumnCriteriaListInnerDto.CriteriaTypeEnum.EQ);
+            criteriaIn.getPossibleValues().addAll(
+                    values.stream()
+                            .filter(v -> !"null".equals(v))
+                            .map(v -> new InColumnFilterAllOfPossibleValuesDto(String.valueOf(v), String.valueOf(v)))
+                            .collect(Collectors.toSet()));
+            grid.addCriteriaListItem(criteriaIn);
+            pageableDto.addGridColumnsItem(grid);
+        });
+
+        entityPage.getContent().forEach(i -> pageableDto.addDataItem(processMapper.toDto(i)));
+
+        return pageableDto;
+    }
+
 }

@@ -24,10 +24,10 @@ public interface ProcessMapper {
   @Mapping(target = "processStatus", source = "entity.status.value")
   @Mapping(target = "taskList", source = "tasks")
   @Mapping(target = "documentList", source = "documents")
-  @Mapping(target = "createdAt", source = "audit.createdAt")
-  @Mapping(target = "modifiedAt", source = "audit.modifiedAt")
-  @Mapping(target = "createdBy", source = "audit.createdBy")
-  @Mapping(target = "modifiedBy", source = "audit.modifiedBy")
+  @Mapping(target = "createdAt", source = "createdAt")
+  @Mapping(target = "modifiedAt", source = "updatedAt")
+  @Mapping(target = "createdBy", source = "createdBy")
+  @Mapping(target = "modifiedBy", source = "updatedAt")
   ProcessEntityDto toDto(ProcessEntity entity);
 
   @Mapping(target = "taskId", source = "id")
@@ -36,20 +36,20 @@ public interface ProcessMapper {
   @Mapping(target = "content", source = "formData")
   @Mapping(target = "customTaskName", source = "entity.taskDefinition.customTaskName")
   @Mapping(target = "schema", source = "entity.taskDefinition.schema")
-  @Mapping(target = "createdAt", source = "audit.createdAt")
-  @Mapping(target = "modifiedAt", source = "audit.modifiedAt")
-  @Mapping(target = "createdBy", source = "audit.createdBy")
-  @Mapping(target = "modifiedBy", source = "audit.modifiedBy")
+  @Mapping(target = "createdAt", source = "createdAt")
+  @Mapping(target = "modifiedAt", source = "updatedAt")
+  @Mapping(target = "createdBy", source = "createdBy")
+  @Mapping(target = "modifiedBy", source = "updatedBy")
   @Mapping(target = "processId", source = "entity.processEntity.id")
   TaskDto toDto(TaskEntity entity);
 
   @Mapping(target = "documentId", source = "id")
   @Mapping(target = "documentName", source = "name")
   @Mapping(target = "documentStatus", source = "entity.documentStatus.value")
-  @Mapping(target = "createdAt", source = "audit.createdAt")
-  @Mapping(target = "modifiedAt", source = "audit.modifiedAt")
-  @Mapping(target = "createdBy", source = "audit.createdBy")
-  @Mapping(target = "modifiedBy", source = "audit.modifiedBy")
+  @Mapping(target = "createdAt", source = "createdAt")
+  @Mapping(target = "modifiedAt", source = "updatedAt")
+  @Mapping(target = "createdBy", source = "createdBy")
+  @Mapping(target = "modifiedBy", source = "updatedBy")
   DocumentDto toDto(Document entity);
 
   List<DocumentDto> toDto(List<Document> entity);
@@ -57,8 +57,10 @@ public interface ProcessMapper {
   @Mapping(target = "processEntityId", source = "id")
   @Mapping(target = "displayName", source = "entity.processDefinition.displayName")
   @Mapping(target = "processStatus", source = "entity.status.value")
-  @Mapping(target = "modifiedAt", source = "audit.modifiedAt")
-  @Mapping(target = "modifiedBy", source = "audit.modifiedBy")
+  @Mapping(target = "modifiedAt", source = "updatedAt")
+  @Mapping(target = "createdAt", source = "createdAt")
+  @Mapping(target = "createdBy", source = "createdBy")
+  @Mapping(target = "modifiedBy", source = "updatedBy")
   ProcessEntityListResponseInnerDto toDtoList(ProcessEntity entity);
 
   List<ProcessEntityListResponseInnerDto> toDtoList(List<ProcessEntity> entity);

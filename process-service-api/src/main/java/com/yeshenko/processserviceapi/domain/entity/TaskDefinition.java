@@ -5,6 +5,7 @@ import static com.yeshenko.processserviceapi.domain.entity.TaskDefinition.TaskDe
 import static com.yeshenko.processserviceapi.domain.entity.TaskDefinition.TaskDefinitionColumn.CUSTOM_TASK_NAME;
 import static com.yeshenko.processserviceapi.domain.entity.TaskDefinition.TaskDefinitionColumn.DEFINITION_KEY;
 import static com.yeshenko.processserviceapi.domain.entity.TaskDefinition.TaskDefinitionColumn.TABLE_NAME;
+import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,17 +14,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
+import org.hibernate.envers.Audited;
 
 @Entity
 @Table(name = TABLE_NAME)
-@Data
-@Builder
+@Builder(toBuilder = true)
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@Getter
+@Setter
+@Audited(targetAuditMode = NOT_AUDITED)
 public class TaskDefinition {
 
   public static class TaskDefinitionColumn {

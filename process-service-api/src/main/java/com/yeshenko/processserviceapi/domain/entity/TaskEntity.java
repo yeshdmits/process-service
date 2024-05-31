@@ -1,42 +1,25 @@
 package com.yeshenko.processserviceapi.domain.entity;
 
-import static com.yeshenko.processserviceapi.domain.entity.TaskEntity.TaskEntityColumn.COLUMN_STATUS;
-import static com.yeshenko.processserviceapi.domain.entity.TaskEntity.TaskEntityColumn.FLOWABLE_TASK_ID;
-import static com.yeshenko.processserviceapi.domain.entity.TaskEntity.TaskEntityColumn.FORM_DATA;
-import static com.yeshenko.processserviceapi.domain.entity.TaskEntity.TaskEntityColumn.PROCESS_ID_FK;
-import static com.yeshenko.processserviceapi.domain.entity.TaskEntity.TaskEntityColumn.TABLE_NAME;
-import static com.yeshenko.processserviceapi.domain.entity.TaskEntity.TaskEntityColumn.TASK_DEFINITION_ID_FK;
-
-import com.yeshenko.processserviceapi.domain.audit.Audit;
-import com.yeshenko.processserviceapi.domain.audit.AuditListener;
-import com.yeshenko.processserviceapi.domain.audit.Auditable;
 import com.yeshenko.processserviceapi.domain.enumeration.TaskStatusEnum;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.envers.Audited;
+
 import java.util.UUID;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import static com.yeshenko.processserviceapi.domain.entity.TaskEntity.TaskEntityColumn.*;
 
 @Entity
 @Table(name = TABLE_NAME)
-@Data
-@Builder
+@Audited
+@Builder(toBuilder = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditListener.class)
-public class TaskEntity implements Auditable {
+@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
+public class TaskEntity extends UpdateAuditableEntity {
 
   public static class TaskEntityColumn {
     public static final String TABLE_NAME = "task";
@@ -71,6 +54,4 @@ public class TaskEntity implements Auditable {
   @Column(name = FORM_DATA, columnDefinition = "json")
   private String formData;
 
-  @Embedded
-  private Audit audit;
 }

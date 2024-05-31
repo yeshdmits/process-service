@@ -16,6 +16,48 @@ servers:
 tags:
   - name: Process Service
 paths:
+  '/process/filtered':
+    post:
+      tags:
+        - Process
+      operationId: getFilteredProcesses
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProcessFilter"
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Pageable'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '404':
+          description: Content / ID not found
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
   '/process/definition':
     get:
       tags:
@@ -345,6 +387,108 @@ paths:
                 $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
 components:
   schemas:
+    ProcessFilter:
+      type: object
+      properties: 
+        page:
+          $ref: "#/components/schemas/Page"
+        filters:
+          type: array
+          items: 
+            $ref: "#/components/schemas/SearchFilter"
+      required:
+        - page
+        - filters
+    Page:
+      type: object
+      properties: 
+        page:
+          type: integer
+        size:
+          type: integer
+        sortBy:
+          type: string
+        order:
+          type: string
+          enum: [asc, desc]
+      required:
+        - page
+        - size
+    SearchFilter:
+      type: object
+      properties:
+        field:
+          type: string
+        criteria:
+          type: string
+          enum: [EQ,LIKE,GT,LT,IN]
+        value:
+          type: string
+      required:
+        - field
+        - criteria
+        - value
+    Pageable:
+      type: object
+      properties:
+        page:
+          type: integer
+        size:
+          type: integer
+        sortBy:
+          type: string
+        order:
+          type: string
+        totalPages:
+          type: integer
+        totalItems:
+          type: integer
+        gridColumns:
+          type: array
+          items:
+            $ref: "#/components/schemas/GridColumn"
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProcessEntity"
+    GridColumn:
+      type: object
+      properties:
+        columnName:
+          type: string
+        criteriaList:
+          type: array
+          items:
+            anyOf:
+              - $ref: "#/components/schemas/ColumnFilter"
+              - $ref: "#/components/schemas/InColumnFilter"
+    ColumnFilter:
+      type: object
+      properties:
+        criteriaType:
+          type: string
+          enum: [ EQ,LIKE,GT,LT,IN]
+      required:
+        - criteriaType
+    InColumnFilter:
+      allOf:
+        - $ref: "#/components/schemas/ColumnFilter"
+        - type: object
+          properties:
+            possibleValues:
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    type: string
+                  label:
+                    type: string
+                required:
+                  - value
+                  - label
+          required:
+            - possibleValues
     ProcessDefinitionResponse:
       type: array
       items:
@@ -371,6 +515,11 @@ components:
             type: string
             format: datetime
           modifiedBy:
+            type: string
+          createdAt:
+            type: string
+            format: datetime
+          createdBy:
             type: string
     TaskComplete:
       type: object

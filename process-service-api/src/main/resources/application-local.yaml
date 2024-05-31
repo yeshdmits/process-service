@@ -9,11 +9,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/process
     username: process
     password: passw0rd
-  jpa:
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
   security:
     type: none
