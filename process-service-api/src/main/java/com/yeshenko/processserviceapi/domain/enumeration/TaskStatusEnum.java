@@ -19,6 +19,6 @@ public enum TaskStatusEnum {
     return Arrays.stream(TaskStatusEnum.values())
         .filter(i -> i.value.equalsIgnoreCase(taskStatus))
         .findFirst()
-        .orElseThrow();
+        .orElseThrow(() -> new IllegalArgumentException("Task Status not exist"));
   }
 }

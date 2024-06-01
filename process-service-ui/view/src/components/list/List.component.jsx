@@ -5,14 +5,17 @@ export const ListRowSelected = "grid grid-cols-4 gap-4 divide-x divide-zinc-300 
 export const ListCell = "p-3 flex items-center justify-center text-center"
 export const ListRow5 = "grid grid-cols-5 gap-4 divide-x divide-zinc-300 p-2 cursor-pointer hover:bg-gray-100 text-center";
 
-const List = ({ header, items }) => {
-    const headerStyle = header.length === 4 ? "grid grid-cols-4 gap-4" : header.length === 1 ? "grid grid-cols-1 gap-4" : "grid grid-cols-5 gap-4"
+const List = ({ header, items, customHeader, customStyle }) => {
+    const headerStyle = header.length === 4 ? "grid grid-cols-4" : header.length === 1 ? "grid grid-cols-1 gap-4" : customHeader ? "grid grid-cols-4" : "grid grid-cols-5"
     return (<>
         {items && items.length > 0 ?
-            <div>
-                <div className="bg-gray-600 text-white px-2 py-4">
-                    <div className={headerStyle}>
-                        {header &&
+            <div className="">
+                <div className={`${headerStyle} bg-gray-600 text-white h-12 item`}>
+                    {
+                        customHeader ?
+                            header
+                            :
+                            header &&
                             header.map((value, index) => {
                                 return (
                                     <div key={index} className="flex items-center justify-center hover:cursor-default text-center">
@@ -20,10 +23,9 @@ const List = ({ header, items }) => {
                                     </div>
                                 );
                             })
-                        }
-                    </div>
+                    }
                 </div>
-                <div className="divide-y divide-zinc-300">
+                <div className={`divide-y divide-zinc-300 ${customStyle ? "min-h-[70vh] max-h-[70vh] overflow-y-auto": ""}`}>
                     {items}
                 </div>
             </div>

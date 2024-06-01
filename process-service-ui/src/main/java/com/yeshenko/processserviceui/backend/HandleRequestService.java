@@ -65,10 +65,8 @@ public class HandleRequestService {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("Authorization: " + authentication);
         if (authentication != null) {
-            System.out.println("Authorization: " + authentication.getPrincipal());
             headers.remove("Authorization");
             DefaultOidcUser principal = (DefaultOidcUser) authentication.getPrincipal();
-            System.out.println("Authorization: " + principal.getIdToken().getTokenValue());
             headers.add("Authorization", "Bearer " + principal.getIdToken().getTokenValue());
         }
         return headers;

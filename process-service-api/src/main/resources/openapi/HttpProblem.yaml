@@ -3,15 +3,6 @@ components:
     HttpProblem:
       type: object
       properties:
-        type:
-          type: string
-          format: uri
-          description: |
-            An absolute URI that identifies the problem type.  When dereferenced,
-            it SHOULD provide human-readable documentation for the problem type
-            (e.g., using HTML).
-          default: 'about:blank'
-          example: 'https://zalando.github.io/problem/constraint-violation'
         title:
           type: string
           description: |
@@ -40,16 +31,6 @@ components:
           description: |
             An absolute URI that identifies the specific occurrence of the problem.
             It may or may not yield further information if dereferenced.
-        envId:
-          type: string
-          description: ID of running environment, see also jbServicingEnvId
-          example: TST50, UAT1, PRD
-        appId:
-          type: string
-          description: Application ID in JBar, see also JB-Servicing-App-Id
-        componentId:
-          type: string
-          description: Component ID within a JBar application
         userId:
           description: User id of a BJB employee.
           type: string

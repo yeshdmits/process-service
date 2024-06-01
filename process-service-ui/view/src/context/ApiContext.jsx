@@ -90,6 +90,16 @@ export const ApiContextProvider = ({ children }) => {
             })
     }
 
+    const getFilteredList = (page, size, sortBy, order, filters) => {
+        return axios.post(getBackendUrl() + '/api/v1/process/filtered',
+            { page: { page, size, sortBy, order }, filters })
+            .then((response) => {
+                return response.data;
+            }).catch(error => {
+                // throw new CustomError(error.message, error.status);
+            })
+    }
+
 
     useEffect(() => { }, [])
 
@@ -102,7 +112,8 @@ export const ApiContextProvider = ({ children }) => {
             completeTask,
             getDocContent,
             getTask,
-            handleDownloadDocument
+            handleDownloadDocument,
+            getFilteredList
         }}>
             {children}
         </ApiContext.Provider>

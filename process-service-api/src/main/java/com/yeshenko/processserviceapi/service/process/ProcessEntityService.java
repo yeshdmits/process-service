@@ -2,9 +2,10 @@ package com.yeshenko.processserviceapi.service.process;
 
 import static com.yeshenko.processserviceapi.config.WorkflowConfig.WORKFLOW_VARIABLE_FORM_DATA;
 import static com.yeshenko.processserviceapi.domain.util.SpecificationUtil.*;
+import static java.lang.String.format;
 import static java.lang.String.valueOf;
 
-import com.yeshenko.processserviceapi.controller.mapper.ProcessMapper;
+import com.yeshenko.processserviceapi.domain.mapper.ProcessMapper;
 import com.yeshenko.processserviceapi.domain.entity.Document;
 import com.yeshenko.processserviceapi.domain.entity.ProcessEntity;
 import com.yeshenko.processserviceapi.domain.enumeration.DocumentStatusEnum;
@@ -16,15 +17,18 @@ import com.yeshenko.processserviceapi.domain.repository.custom.ProcessEntityRepo
 import com.yeshenko.processserviceapi.domain.repository.TaskEntityRepository;
 import com.yeshenko.processserviceapi.domain.util.MapUtil;
 import com.yeshenko.processserviceapi.domain.util.SpecificationUtil;
+import com.yeshenko.processserviceapi.exception.BadRequestException;
+import com.yeshenko.processserviceapi.exception.NotFoundException;
 import com.yeshenko.processserviceapi.models.v1.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class ProcessEntityService {
+    private static final Logger log = LoggerFactory.getLogger(ProcessEntityService.class);
 
     private final WorkflowService workflowService;
     private final ProcessEntityRepository processEntityRepository;
@@ -44,16 +49,18 @@ public class ProcessEntityService {
     private final ProcessMapper processMapper;
 
     public UUID createProcess(UUID processDefinitionId) {
-//    log
+        log.info("Starting a new process with process definition uuid: {}", processDefinitionId);
+
         UUID processInstanceId = workflowService.startProcess(processDefinitionId);
-        return processEntityRepository.findOne(SpecificationUtil.getSpecification(null, processInstanceId)).orElseThrow().getId();
+        return processEntityRepository.findOne(SpecificationUtil.getSpecification(null, processInstanceId))
+                .orElseThrow(() -> new NotFoundException(format("Could not find process entity with process instance id: %s", processInstanceId)))
+                .getId();
     }
 
     public ProcessEntityDto getProcess(UUID processEntityId, UUID processInstanceId) {
         var processEntity = processEntityRepository.findOne(
                         SpecificationUtil.getSpecification(processEntityId, processInstanceId))
-                .orElseThrow();
-
+                .orElseThrow(() -> new NotFoundException(format("Could not find process entity with id: %s", processEntityId)));
         var activeTaskId = workflowService.getActiveTaskId(
                 valueOf(processEntity.getProcessInstanceId()));
 
@@ -66,23 +73,28 @@ public class ProcessEntityService {
                 .toList());
 
         var toReturn = processMapper.toDto(processEntity);
-//    log
+        log.info("The process with uuid: {} was successfully found", processEntityId);
 
         if (activeTaskId != null) {
+            log.info("Active task with id: {} was found, trying to enrich metadata", activeTaskId);
             toReturn.setMetadata(this.enrichTaskMetadata(activeTaskId));
         }
-//    log
-
         return toReturn;
     }
 
     @Transactional
     public void completeTask(TaskCompleteDto request) {
         var taskEntity = taskEntityRepository.findById(request.getTaskId())
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException(format("Could not find task entity with id: %s", request.getTaskId())));
 
-        taskEntity.setTaskStatus(TaskStatusEnum.fromValue(request.getDecision().getValue()));
-//    log
+        try {
+            var taskStatusEnum = TaskStatusEnum.fromValue(request.getDecision().getValue());
+            taskEntity.setTaskStatus(taskStatusEnum);
+            log.info("Task Status was successfully updated, new value: {}", taskStatusEnum);
+        } catch (IllegalArgumentException e) {
+            log.info("Error while parsing request data, task status {} is not found", request.getDecision().getValue());
+            throw new BadRequestException(format("Invalid task status: %s", request.getDecision().getValue()));
+        }
 
         if (taskEntity.getTaskDefinition().getCustomTaskName() == null) {
             taskEntity.setFormData(request.getFormData());
@@ -91,7 +103,7 @@ public class ProcessEntityService {
                     WORKFLOW_VARIABLE_FORM_DATA,
                     request.getFormData()
             );
-//    log
+            log.info("Task Payload was successfully updated, task id: {}", taskEntity.getId());
         }
 
         workflowService.completeTask(valueOf(taskEntity.getFlowableTaskId()));
@@ -99,8 +111,8 @@ public class ProcessEntityService {
 
     public MetadataDto enrichTaskMetadata(UUID flowableTaskId) {
         var taskEntity = taskEntityRepository.findByFlowableTaskId(flowableTaskId)
-                .orElseThrow();
-//    log
+                .orElseThrow(() -> new NotFoundException(format("Could not find task entity with flowable id: %s", flowableTaskId)));
+        log.info("Task Entity with flowable id: {} was successfully found", flowableTaskId);
         return new MetadataDto()
                 .taskId(taskEntity.getId())
                 .taskName(taskEntity.getTaskDefinition().getName());
@@ -112,15 +124,14 @@ public class ProcessEntityService {
                 .processDefinition(processDefinitionRepository.findById(processDefinitionId).orElseThrow())
                 .status(ProcessStatusEnum.CREATED)
                 .build();
-//    log
-
+        log.info("Saving Process Entity with process instance id: {} for process definition id: {}", processInstanceId, processDefinitionId);
         return processEntityRepository.save(entityToSave).getId();
     }
 
     public void createDocument(UUID processInstanceId, byte[] content) {
         var processEntity = processEntityRepository.findOne(
                         SpecificationUtil.getSpecification(null, processInstanceId))
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException(format("Could not find process entity with process instance id: %s", processInstanceId)));
 
         var toSave = Document.builder()
                 .documentStatus(DocumentStatusEnum.CREATED)
@@ -128,14 +139,16 @@ public class ProcessEntityService {
                 .processEntity(processEntity)
                 .name("Report.pdf")
                 .build();
-//    log
+
+        log.info("Saving new document for process id: {}", processInstanceId);
 
         documentRepository.save(toSave);
     }
 
     public byte[] getDocumentBinaryData(UUID documentId) {
-        Document document = documentRepository.findById(documentId).orElseThrow();
-//    log
+        Document document = documentRepository.findById(documentId)
+                .orElseThrow(() -> new NotFoundException(format("Could not find document with id: %s", documentId)));
+        log.info("The Document with id: {} was successfully found", documentId);
         return document.getContent();
     }
 
@@ -143,8 +156,9 @@ public class ProcessEntityService {
     public void updateProcessStatus(UUID processEntityId, ProcessStatusEnum status) {
         var processEntity = processEntityRepository.findOne(
                         SpecificationUtil.getSpecification(processEntityId, null))
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException(format("Could not find process entity with id: %s", processEntityId)));
 //    log
+        log.info("The Process with id: {} was successfully found, updating status: {}", processEntityId, status);
 
         processEntity.setStatus(status);
     }
@@ -153,44 +167,49 @@ public class ProcessEntityService {
     public void sendDocumentDistributionRequest(UUID processEntityId) {
         var processEntity = processEntityRepository.findOne(
                         SpecificationUtil.getSpecification(processEntityId, null))
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException(format("Could not find process entity with id: %s", processEntityId)));
 
         processEntity.getDocuments()
                 .stream().filter(i -> DocumentStatusEnum.CREATED.equals(i.getDocumentStatus()))
                 .forEach(i -> i.setDocumentStatus(DocumentStatusEnum.SENT));
+        log.info("The Documents for process with id: {} was successfully sent", processEntityId);
     }
 
     @Transactional
     public void validateDocuments(UUID processEntityId) {
         var processEntity = processEntityRepository.findOne(
                         SpecificationUtil.getSpecification(processEntityId, null))
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException(format("Could not find process entity with id: %s", processEntityId)));
 
         processEntity.getDocuments().stream()
                 .filter(i -> DocumentStatusEnum.SENT.equals(i.getDocumentStatus()))
                 .forEach(i -> i.setDocumentStatus(DocumentStatusEnum.COMPLETED));
+        log.info("The Documents for process with id: {} was successfully validated", processEntityId);
     }
 
     @Transactional
     public void rejectDocuments(UUID processEntityId) {
         var processEntity = processEntityRepository.findOne(
                         SpecificationUtil.getSpecification(processEntityId, null))
-                .orElseThrow();
+                .orElseThrow(() -> new NotFoundException(format("Could not find process entity with id: %s", processEntityId)));
 
         processEntity.getDocuments().stream()
                 .filter(i -> DocumentStatusEnum.SENT.equals(i.getDocumentStatus()))
                 .forEach(i -> i.setDocumentStatus(DocumentStatusEnum.WITHDRAWN));
+        log.info("The Documents for process with id: {} was rejected", processEntityId);
     }
 
     public List<ProcessEntityListResponseInnerDto> fetchProcessEntityList() {
         var processEntityList = processEntityRepository.findAll().stream()
                 .sorted((o1, o2) -> o2.getUpdatedAt().compareTo(o1.getUpdatedAt()))
                 .toList();
+        log.info("The Process List was successfully fetched, size: {}", processEntityList.size());
         return processMapper.toDtoList(processEntityList);
     }
 
     public List<ProcessDefinitionResponseInnerDto> getProcessDefinitionList() {
         var processDefinitionList = processDefinitionRepository.findAll();
+        log.info("The Process Definition List was successfully fetched, size: {}", processDefinitionList.size());
 
         return processMapper.toDtoDefinitionList(processDefinitionList);
     }
@@ -199,14 +218,15 @@ public class ProcessEntityService {
         var taskEntity = taskEntityRepository.findById(taskId).orElseThrow();
         var toReturn = processMapper.toDto(taskEntity);
         if (taskEntity.getTaskDefinition().getCustomTaskName() == null) {
-//      log
+            log.info("The Json Based task was detected");
             return toReturn;
         }
 
+        log.info("The Custom Component Based task was detected");
         var documents = documentRepository.findAllByProcessEntityId(
                         taskEntity.getProcessEntity().getId());
         var documentList = processMapper.toDto(documents);
-//    log
+        log.info("The documents for Custom Component were found, size: {}", documents.size());
         return toReturn
                 .componentProps(MapUtil.serializeObjectToString(documentList));
     }
@@ -234,7 +254,7 @@ public class ProcessEntityService {
         pageableDto.setSize(entityPage.getNumberOfElements());
 
         sorting.get().findFirst().ifPresent(i -> pageableDto.setSortBy(i.getProperty()));
-        sorting.get().findFirst().ifPresent(i -> pageableDto.setOrder(i.getDirection().name()));
+        sorting.get().findFirst().ifPresent(i -> pageableDto.setOrder(i.getDirection().name().toLowerCase()));
 
         processEntityRepository.findColumns(spec).forEach((column, values) -> {
             var grid = new GridColumnDto();
@@ -250,8 +270,7 @@ public class ProcessEntityService {
             pageableDto.addGridColumnsItem(grid);
         });
 
-        entityPage.getContent().forEach(i -> pageableDto.addDataItem(processMapper.toDto(i)));
-
+        pageableDto.setData(processMapper.toDtoList(entityPage.getContent()));
         return pageableDto;
     }
 

@@ -39,10 +39,6 @@ public class JwtSecurityConfig {
     http.authorizeHttpRequests(auth -> auth
             .requestMatchers(new AntPathRequestMatcher("/api/**"))
             .authenticated()
-//            .requestMatchers(new AntPathRequestMatcher("/login"))
-//            .permitAll()
-//            .requestMatchers(new AntPathRequestMatcher("/refresh"))
-//            .permitAll()
             .anyRequest().permitAll())
         .cors(AbstractHttpConfigurer::disable)
         .csrf(AbstractHttpConfigurer::disable);

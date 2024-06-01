@@ -1,4 +1,4 @@
-package com.yeshenko.processserviceapi.controller.mapper;
+package com.yeshenko.processserviceapi.domain.mapper;
 
 import com.yeshenko.processserviceapi.domain.entity.Document;
 import com.yeshenko.processserviceapi.domain.entity.ProcessDefinition;

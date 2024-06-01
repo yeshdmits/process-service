@@ -32,7 +32,7 @@ public class CustomProcessEntityRepositoryImpl implements CustomProcessEntityRep
             Root<ProcessEntity> root = criteriaQuery.from(ProcessEntity.class);
             criteriaQuery.select(root.get(column.value)).distinct(true).where(specification.toPredicate(root, criteriaQuery, cb));
             var results = entityManager.createQuery(criteriaQuery).getResultList();
-            resultMap.put(column.name(), results);
+            resultMap.put(column.getValue(), results);
 
         }
         return resultMap;
@@ -43,7 +43,9 @@ public class CustomProcessEntityRepositoryImpl implements CustomProcessEntityRep
     enum ColumnValues {
         STATUS("status"),
         CREATED_AT("createdAt"),
-        CREATED_BY("createdBy");
+        CREATED_BY("createdBy"),
+        UPDATED_AT("updatedAt"),
+        UPDATED_BY("updatedBy");
         private final String value;
 
     }

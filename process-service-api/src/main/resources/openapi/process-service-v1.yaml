@@ -448,9 +448,7 @@ components:
           items:
             $ref: "#/components/schemas/GridColumn"
         data:
-          type: array
-          items:
-            $ref: "#/components/schemas/ProcessEntity"
+          $ref: "#/components/schemas/ProcessEntityListResponse"
     GridColumn:
       type: object
       properties:
