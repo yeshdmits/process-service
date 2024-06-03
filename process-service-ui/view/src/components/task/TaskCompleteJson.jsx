@@ -23,7 +23,7 @@ const TaskCompleteJson = ({ task, readOnly, submitTask }) => {
 
     return (
         <>
-            <div className="w-full flex justify-center overflow-y-auto">
+            <div className="max-h-[70vh] w-full flex justify-center overflow-y-auto">
                 <Form
                     schema={schema}
                     validator={validator}

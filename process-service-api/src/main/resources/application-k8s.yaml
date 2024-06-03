@@ -1,0 +1,21 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:localhost}:6432/process
+    username: process
+    password: ${DB_KEY:76d9dc9b-ac47-472d-b5cd-62716b41051d}
+  security:
+    type: jwt
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:http://process.k8s.keycloak.local}/realms/process-org
+springdoc:
+  swagger-ui:
+    path: /
+

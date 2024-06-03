@@ -9,7 +9,7 @@ const ActivationStatus = ({ status }) => {
     return (
         <>
             <Header name={"Activation Status"}>
-                <div className="flex justify-around min-h-24 items-center">
+                <div className="flex justify-around min-h-24 text-sm items-center">
                     <div className="flex flex-col items-center justify-center">
                         <Status status={createdStatus} />
                         <div className={status === 'Created' ? InProgress : Done}>

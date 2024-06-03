@@ -1,0 +1,27 @@
+server:
+  port: 8060
+  servlet:
+    context-path: /
+  forward-headers-strategy: native
+  tomcat:
+    use-relative-redirects: true
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: process-app
+            client-secret: C9lFyskKa6GxpFZTx5bzmemJtDHb56yO
+            scope:
+              - openid
+              - profile
+              - email
+            authorization-grant-type: authorization_code
+        provider:
+          keycloak:
+            issuer-uri: http://process.k8s.keycloak.local/realms/process-org
+            user-name-attribute: preferred_username
+
+mirror:
+  backend: http://localhost:8080

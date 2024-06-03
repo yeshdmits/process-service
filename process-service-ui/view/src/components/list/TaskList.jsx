@@ -4,10 +4,8 @@ import { formatDate } from "../../service/Utils";
 import Header from "./Header.component";
 import List, { ListRow, ListCell } from "./List.component";
 
-const NextPrev = "hover:cursor-pointer flex items-center hover:bg-gray-300 rounded-full";
-
-const TaskList = ({ taskList, handleViewTask }) => {
-    const items = taskList && taskList.map((task, id) =>
+export const TaskItems = (taskList, handleViewTask) => {
+    return taskList && taskList.map((task, id) =>
         <div key={id} onClick={() => handleViewTask(task)} className={ListRow}>
 
             <div className={ListCell}>
@@ -24,11 +22,13 @@ const TaskList = ({ taskList, handleViewTask }) => {
             </div>
         </div>
     )
+}
 
+const TaskList = ({ taskList, handleViewTask }) => {
     return (
         <>
             <Header name={"Task Overview"}>
-                <List header={["Name", "Last Action", "Updated By", "Resolution"]} items={items} />
+                <List header={["Name", "Last Action", "Updated By", "Resolution"]} items={TaskItems(taskList, handleViewTask)} />
             </Header>
         </>
     );

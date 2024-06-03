@@ -10,7 +10,7 @@ const Header = (props) => {
             <div className="hover:bg-sky-500 rounded-full hover:cursor-pointer ">
                 {props.elem != null && props.elem}
             </div>
-            <div className="p-2 px-5 flex grow justify-between items-center text-2xl rounded-full hover:cursor-pointer hover:bg-sky-500 hover:text-black text-white"
+            <div className="p-2 flex grow justify-between items-center text-lg rounded-full hover:cursor-pointer hover:bg-sky-500 hover:text-black text-white"
                 onClick={() => setShow(!show)} >
                 <div>{props.name}</div>
                 <div>

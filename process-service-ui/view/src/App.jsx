@@ -5,6 +5,8 @@ import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 import ProcessMain from './components/process/ProcessMain';
 import { ApiContextProvider } from './context/ApiContext';
+import UserAccount from './components/user/UserAccount';
+import NavBar from './components/user/NavBar';
 
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
     'pdfjs-dist/build/pdf.worker.min.js',
@@ -15,9 +17,13 @@ function App() {
     return (
         <BrowserRouter>
             <ApiContextProvider>
-                <Routes>
-                    <Route path="/" element={<ProcessMain />} />
-                </Routes>
+                <NavBar />
+                <main className="max-h-[80vh]">
+                    <Routes>
+                        <Route path="/" element={<ProcessMain />} />
+                        <Route path="/account" element={<UserAccount />} />
+                    </Routes>
+                </main>
             </ApiContextProvider>
         </BrowserRouter>
     );

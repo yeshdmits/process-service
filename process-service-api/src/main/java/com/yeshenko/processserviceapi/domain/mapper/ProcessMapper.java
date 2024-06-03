@@ -27,7 +27,7 @@ public interface ProcessMapper {
   @Mapping(target = "createdAt", source = "createdAt")
   @Mapping(target = "modifiedAt", source = "updatedAt")
   @Mapping(target = "createdBy", source = "createdBy")
-  @Mapping(target = "modifiedBy", source = "updatedAt")
+  @Mapping(target = "modifiedBy", source = "updatedBy")
   ProcessEntityDto toDto(ProcessEntity entity);
 
   @Mapping(target = "taskId", source = "id")
@@ -42,6 +42,8 @@ public interface ProcessMapper {
   @Mapping(target = "modifiedBy", source = "updatedBy")
   @Mapping(target = "processId", source = "entity.processEntity.id")
   TaskDto toDto(TaskEntity entity);
+
+  List<TaskDto> toDtoTaskList(List<TaskEntity> entity);
 
   @Mapping(target = "documentId", source = "id")
   @Mapping(target = "documentName", source = "name")

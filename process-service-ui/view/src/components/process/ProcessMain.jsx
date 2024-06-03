@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProcessList from '../list/ProcessList';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import AdditionalScreen from "./AdditionalScreen";
+import NavBar from "../user/NavBar";
 
 const ProcessMain = () => {
     const { state } = useLocation();
@@ -60,7 +61,7 @@ const ProcessMain = () => {
                         <ProcessList />
                     </div>
                 </div>
-                <div className="min-h-screen relative overflow-y-auto max-h-screen flex flex-col justify-around w-full">
+                <div className="min-h-full relative overflow-y-auto max-h-[80vh] flex flex-col justify-around w-full">
                     <AdditionalScreen
                         showAddProduct={addProduct}
                         showFeatures={features}

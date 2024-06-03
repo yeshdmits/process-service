@@ -6,7 +6,7 @@ import TaskCompleteJson from "./TaskCompleteJson";
 import Header from "../list/Header.component";
 import GoBack from '../../svgs/go-back.svg?react'
 
-export const Button = 'hover:cursor-pointer hover:bg-emerald-500 sticky bottom-2 w-full flex items-center justify-center min-h-14 mb-2 text-white mt-4 bg-emerald-600 border border-cyan-900';
+export const Button = 'hover:cursor-pointer hover:bg-emerald-500 w-full flex items-center justify-center min-h-14 mb-2 text-white mt-4 bg-emerald-600 border border-cyan-900';
 
 
 const TaskOverview = () => {

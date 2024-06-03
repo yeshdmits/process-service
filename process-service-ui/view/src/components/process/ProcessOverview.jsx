@@ -7,6 +7,7 @@ import DocumentList from "../list/DocumentList";
 import { useApiContext } from "../../context/ApiContext";
 import Header from "../list/Header.component";
 import { Button } from "../task/TaskOverview";
+import { formatDate } from "../../service/Utils";
 
 
 const ProcessOverview = () => {
@@ -82,6 +83,37 @@ const ProcessOverview = () => {
     return (
         <Header name={processData.displayName} elem={<GoBack onClick={handleClose} />}>
             <div className="mt-1 grid gap-1">
+                <div className="flex flex-col justify-around m-2">
+                    <div className="bg-gray-100 p-4 rounded-md shadow-md w-full">
+                        <div className="font-semibold text-gray-700">
+                            {processData.createdBy}
+                        </div>
+                        <div className="text-gray-500 text-sm mt-2">
+                            Name of the user who created the process
+                        </div>
+                        <div className="font-semibold text-gray-700 mt-4">
+                            {formatDate(processData.createdAt)}
+                        </div>
+                        <div className="text-gray-500 text-sm mt-2">
+                            Date and time when the process was created
+                        </div>
+                    </div>
+                    <div className="bg-gray-100 p-4 rounded-md shadow-md w-full">
+                        <div className="font-semibold text-gray-700 mt-4">
+                            {processData.modifiedBy}
+                        </div>
+                        <div className="text-gray-500 text-sm mt-2">
+                            Name of the user who last modified the process
+                        </div>
+                        <div className="font-semibold text-gray-700">
+                            {formatDate(processData.modifiedAt)}
+                        </div>
+                        <div className="text-gray-500 text-sm mt-2">
+                            Date and time when the process was last modified
+                        </div>
+                    </div>
+
+                </div>
                 {processData.metadata &&
                     <div className={Button}
                         onClick={() => handleTaskComplete(processData.metadata.taskId)}>
@@ -91,7 +123,6 @@ const ProcessOverview = () => {
                 <div>
                     <ActivationStatus status={processData.processStatus} />
                 </div>
-                {/* <div className="product-summary"></div> */}
                 <div>
                     <TaskList handleViewTask={handleViewTask} taskList={processData.taskList} />
                 </div>
