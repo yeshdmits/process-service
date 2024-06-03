@@ -8,15 +8,13 @@ import Asc from '../../svgs/asc.svg?react';
 import Desc from '../../svgs/desc.svg?react';
 import Pagination from "./Pagination.component";
 
-const NextPrev = "hover:cursor-pointer flex items-center hover:bg-gray-300 rounded-full";
-
 const ProcessList = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [productList, setProductList] = useState([]);
     const [page, setPage] = useState(0);
 
-    const [size, setSize] = useState(5);
+    const [size, setSize] = useState(10);
     const [sortBy, setSortBy] = useState('createdAt');
     const [order, setOrder] = useState('desc');
     const [totalPages, setTotalPages] = useState(0);
@@ -116,15 +114,7 @@ const ProcessList = () => {
     }
 
     useEffect(() => {
-        const fetchDataFromApi = () => {
-            getProductList().then(data => {
-                setProductList(data)
-            })
-        }
         callFiltered()
-
-        // fetchDataFromApi();
-
     }, [searchParams, page, size, order, sortBy]);
 
     return (
@@ -138,7 +128,7 @@ const ProcessList = () => {
                     onNext={onNext}
                     totalPages={totalPages}
                     handleSizeChange={handleSizeChange}
-                    defaultSizeValues={[1, 5, 10]}
+                    defaultSizeValues={[5, 10, 50]}
                 />
             </Header>
         </>

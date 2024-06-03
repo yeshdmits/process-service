@@ -6,19 +6,17 @@ import { createSearchParams, useNavigate } from "react-router-dom";
 import { formatDate, formatAuthDate } from "../../service/Utils";
 import TaskStatus from "../status/TaskStatus";
 import Sortable from "./Sortable.component";
-import Filterable from "./Filterable.component";
 
 const UserAccount = () => {
     const [decodedToken, setDecodedToken] = useState();
     const [userTaskList, setUserTaskList] = useState();
-    const [filteredTaskList, setFilteredTaskList] = useState();
     const { getUserInfo, getAssignedTasks } = useApiContext();
     const headers = ["Name", "Updated At", "Created At", "Updated By", "Resolution"];
 
     const navigate = useNavigate();
 
     const [page, setPage] = useState(0);
-    const [size, setSize] = useState(5);
+    const [size, setSize] = useState(10);
     const [sortBy, setSortBy] = useState('Created At');
     const [order, setOrder] = useState('desc');
     const [totalPages, setTotalPages] = useState(0);
@@ -51,9 +49,9 @@ const UserAccount = () => {
         let currentPage = page - 1;
         setPage(currentPage)
         const offset = currentPage * size
-        setCurrentPageTask(filteredTaskList.slice(offset, offset + size));
-        setTotalPages(Math.ceil(filteredTaskList.length / size));
-        setTotalItems(filteredTaskList.length);
+        setCurrentPageTask(userTaskList.slice(offset, offset + size));
+        setTotalPages(Math.ceil(userTaskList.length / size));
+        setTotalItems(userTaskList.length);
     }
 
     const onNext = () => {
@@ -63,9 +61,9 @@ const UserAccount = () => {
         let currentPage = page + 1;
         setPage(currentPage)
         const offset = currentPage * size
-        setCurrentPageTask(filteredTaskList.slice(offset, offset + size));
-        setTotalPages(Math.ceil(filteredTaskList.length / size));
-        setTotalItems(filteredTaskList.length);
+        setCurrentPageTask(userTaskList.slice(offset, offset + size));
+        setTotalPages(Math.ceil(userTaskList.length / size));
+        setTotalItems(userTaskList.length);
     }
 
     const handleSizeChange = (event) => {
@@ -74,9 +72,9 @@ const UserAccount = () => {
         setSize(currentSize);
         setPage(currentPage);
         const offset = currentPage * currentSize
-        setCurrentPageTask(filteredTaskList.slice(offset, offset + currentSize));
-        setTotalPages(Math.ceil(filteredTaskList.length / currentSize));
-        setTotalItems(filteredTaskList.length);
+        setCurrentPageTask(userTaskList.slice(offset, offset + currentSize));
+        setTotalPages(Math.ceil(userTaskList.length / currentSize));
+        setTotalItems(userTaskList.length);
     }
 
     const mapSort = (field) => {
@@ -96,10 +94,10 @@ const UserAccount = () => {
 
     const handleSortBy = (field) => {
         let column = mapSort(field);
-        if (!filteredTaskList || filteredTaskList.length === 0) {
+        if (!userTaskList || userTaskList.length === 0) {
             return;
         }
-        let sortable = [...filteredTaskList];
+        let sortable = [...userTaskList];
         sortable.sort((a, b) => {
             if (a[column] < b[column]) {
                 return order === "asc" ? -1 : 1;
@@ -121,48 +119,48 @@ const UserAccount = () => {
             setOrder('desc');
         }
         const offset = page * size
-        setFilteredTaskList(sortable)
+        setUserTaskList(sortable)
         setCurrentPageTask(sortable.slice(offset, offset + size));
     }
 
-    const handleFilters = (newFilter) => {
-        let newFilters = [...filters];
+    // const handleFilters = (newFilter) => {
+    //     let newFilters = [...filters];
 
-        if (newFilters.map(item => item.name).includes(newFilter)) {
-        setFilters(newFilters.filter(item => item.name !== newFilter));
-        } else {
-            newFilters.push({name: newFilter});
-            setFilters(newFilters);
-        }
-    }
+    //     if (newFilters.map(item => item.name).includes(newFilter)) {
+    //     setFilters(newFilters.filter(item => item.name !== newFilter));
+    //     } else {
+    //         newFilters.push({name: newFilter});
+    //         setFilters(newFilters);
+    //     }
+    // }
 
-    const handleDateFilter = (newFilters, field) => {
-        setFilters(newFilters)
-        let filterDate = newFilters.filter(i => i.name === field);
-        const filtered = [...filteredTaskList].filter(i => {
-            if (!filterDate[0]) {
-                return true;
-            }
-            if (!filterDate[0].criteria === 'GT') {
-                return new Date(i[field]) >= new Date(filterDate[0].value)
-            } else {
-                return new Date(i[field]) <= new Date(filterDate[0].value)
-            }
-        }).filter(i => {
-            if (filterDate[1]) {
-                return true;
-            }
-            if (filterDate[1].criteria === 'GT') {
-                return new Date(i[field]) >= new Date(filterDate[1].value)
-            } else {
-                return new Date(i[field]) <= new Date(filterDate[1].value)
-            }
-        })
-        const offset = page * size
-        console.log(filtered)
-        setFilteredTaskList(filtered)
-        setCurrentPageTask(filtered.slice(offset, offset + size));
-    }
+    // const handleDateFilter = (newFilters, field) => {
+    //     setFilters(newFilters)
+    //     let filterDate = newFilters.filter(i => i.name === field);
+    //     const filtered = [...filteredTaskList].filter(i => {
+    //         if (!filterDate[0]) {
+    //             return true;
+    //         }
+    //         if (!filterDate[0].criteria === 'GT') {
+    //             return new Date(i[field]) >= new Date(filterDate[0].value)
+    //         } else {
+    //             return new Date(i[field]) <= new Date(filterDate[0].value)
+    //         }
+    //     }).filter(i => {
+    //         if (filterDate[1]) {
+    //             return true;
+    //         }
+    //         if (filterDate[1].criteria === 'GT') {
+    //             return new Date(i[field]) >= new Date(filterDate[1].value)
+    //         } else {
+    //             return new Date(i[field]) <= new Date(filterDate[1].value)
+    //         }
+    //     })
+    //     const offset = page * size
+    //     console.log(filtered)
+    //     setFilteredTaskList(filtered)
+    //     setCurrentPageTask(filtered.slice(offset, offset + size));
+    // }
 
 
     useEffect(() => {
@@ -173,7 +171,6 @@ const UserAccount = () => {
                     getAssignedTasks()
                         .then(data => {
                             setUserTaskList(data);
-                            setFilteredTaskList(data);
                             const offset = page * size
                             setCurrentPageTask(data.slice(offset, offset + size));
                             setTotalPages(Math.ceil(data.length / size));
@@ -274,7 +271,7 @@ const UserAccount = () => {
                             onNext={onNext}
                             totalPages={totalPages}
                             handleSizeChange={handleSizeChange}
-                            defaultSizeValues={[1, 5, 10]}
+                            defaultSizeValues={[5, 10, 50]}
                         />
                     </div>
                 </div>

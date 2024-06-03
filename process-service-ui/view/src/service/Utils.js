@@ -1,21 +1,23 @@
 function formatDate(inputDate) {
     const date = new Date(inputDate);
+    let localDate = toLocalDate(date)
 
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const day = String(localDate.getDate()).padStart(2, '0');
+    const month = String(localDate.getMonth() + 1).padStart(2, '0');
+    const year = localDate.getFullYear();
+    const hours = String(localDate.getHours()).padStart(2, '0');
+    const minutes = String(localDate.getMinutes()).padStart(2, '0');
 
     return `${day}-${month}-${year} ${hours}:${minutes}`;
 }
 
 function formatDateFilter(inputDate) {
     const date = new Date(inputDate);
+    let localDate = toLocalDate(date)
 
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
+    const day = String(localDate.getDate()).padStart(2, '0');
+    const month = String(localDate.getMonth() + 1).padStart(2, '0');
+    const year = localDate.getFullYear();
 
     return `${day}-${month}-${year}`;
 }
@@ -32,31 +34,32 @@ function formatTimestamp(timestamp) {
 
     const pad = (num) => (num < 10 ? '0' : '') + num;
 
-    const formattedDate = `${pad(day)} ${monthName} ${year} at ${pad(hour)}:${pad(minutes)}:${pad(seconds)}`;
+    return `${pad(day)} ${monthName} ${year} at ${pad(hour)}:${pad(minutes)}:${pad(seconds)}`;
+}
 
-    return formattedDate;
+const toLocalDate = (date) => {
+    return new Date(date.getTime() + 2 * 60 * 60 * 1000);
 }
 
 const formatAuthDate = (date) => {
+    let localDate = toLocalDate(date)
     const months = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
-    const day = date.getDate();
-    const month = date.getMonth();
-    const year = date.getFullYear();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    const seconds = date.getSeconds();
+    const day = localDate.getDate();
+    const month = localDate.getMonth();
+    const year = localDate.getFullYear();
+    const hours = localDate.getHours();
+    const minutes = localDate.getMinutes();
+    const seconds = localDate.getSeconds();
 
     const pad = (num) => (num < 10 ? '0' : '') + num;
 
     const monthName = months[month];
 
-    const formattedDate = `${pad(day)} ${monthName} ${year} at ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-
-    return formattedDate;
+    return `${pad(day)} ${monthName} ${year} at ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 };
 
 export { formatDate, formatTimestamp, formatAuthDate, formatDateFilter }
