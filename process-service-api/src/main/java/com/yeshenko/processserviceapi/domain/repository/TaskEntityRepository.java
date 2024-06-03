@@ -1,6 +1,8 @@
 package com.yeshenko.processserviceapi.domain.repository;
 
 import com.yeshenko.processserviceapi.domain.entity.TaskEntity;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface TaskEntityRepository extends JpaRepository<TaskEntity, UUID> {
 
   Optional<TaskEntity> findByFlowableTaskId(UUID flowableTaskId);
+
+  List<TaskEntity> findAllByTaskDefinition_assignRoleIn(List<String> assignRole);
 }

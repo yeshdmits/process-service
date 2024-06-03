@@ -5,6 +5,7 @@ import static com.yeshenko.processserviceapi.domain.util.SpecificationUtil.*;
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
 
+import com.yeshenko.processserviceapi.domain.entity.TaskEntity;
 import com.yeshenko.processserviceapi.domain.mapper.ProcessMapper;
 import com.yeshenko.processserviceapi.domain.entity.Document;
 import com.yeshenko.processserviceapi.domain.entity.ProcessEntity;
@@ -19,6 +20,7 @@ import com.yeshenko.processserviceapi.domain.util.MapUtil;
 import com.yeshenko.processserviceapi.domain.util.SpecificationUtil;
 import com.yeshenko.processserviceapi.exception.BadRequestException;
 import com.yeshenko.processserviceapi.exception.NotFoundException;
+import com.yeshenko.processserviceapi.exception.ForbiddenException;
 import com.yeshenko.processserviceapi.models.v1.*;
 
 import java.util.List;
@@ -26,7 +28,9 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.yeshenko.processserviceapi.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -47,6 +51,7 @@ public class ProcessEntityService {
     private final TaskEntityRepository taskEntityRepository;
     private final DocumentRepository documentRepository;
     private final ProcessMapper processMapper;
+    private final SecurityService securityService;
 
     public UUID createProcess(UUID processDefinitionId) {
         log.info("Starting a new process with process definition uuid: {}", processDefinitionId);
@@ -113,6 +118,9 @@ public class ProcessEntityService {
         var taskEntity = taskEntityRepository.findByFlowableTaskId(flowableTaskId)
                 .orElseThrow(() -> new NotFoundException(format("Could not find task entity with flowable id: %s", flowableTaskId)));
         log.info("Task Entity with flowable id: {} was successfully found", flowableTaskId);
+        if (noUserAccessToTask(taskEntity)) {
+            return null;
+        }
         return new MetadataDto()
                 .taskId(taskEntity.getId())
                 .taskName(taskEntity.getTaskDefinition().getName());
@@ -157,7 +165,6 @@ public class ProcessEntityService {
         var processEntity = processEntityRepository.findOne(
                         SpecificationUtil.getSpecification(processEntityId, null))
                 .orElseThrow(() -> new NotFoundException(format("Could not find process entity with id: %s", processEntityId)));
-//    log
         log.info("The Process with id: {} was successfully found, updating status: {}", processEntityId, status);
 
         processEntity.setStatus(status);
@@ -215,7 +222,10 @@ public class ProcessEntityService {
     }
 
     public TaskDto getTask(UUID taskId) {
-        var taskEntity = taskEntityRepository.findById(taskId).orElseThrow();
+        var taskEntity = taskEntityRepository.findById(taskId).orElseThrow(() -> new NotFoundException("No task was found"));
+        if (noUserAccessToTask(taskEntity) && TaskStatusEnum.IN_PROGRESS.equals(taskEntity.getTaskStatus())) {
+            throw new ForbiddenException(format("User has not access to task with id: %s", taskId));
+        }
         var toReturn = processMapper.toDto(taskEntity);
         if (taskEntity.getTaskDefinition().getCustomTaskName() == null) {
             log.info("The Json Based task was detected");
@@ -224,7 +234,7 @@ public class ProcessEntityService {
 
         log.info("The Custom Component Based task was detected");
         var documents = documentRepository.findAllByProcessEntityId(
-                        taskEntity.getProcessEntity().getId());
+                taskEntity.getProcessEntity().getId());
         var documentList = processMapper.toDto(documents);
         log.info("The documents for Custom Component were found, size: {}", documents.size());
         return toReturn
@@ -241,7 +251,7 @@ public class ProcessEntityService {
         Specification<ProcessEntity> spec = Specification.where((root, query, criteriaBuilder) ->
                 criteriaBuilder.conjunction());
         if (filterDto.getFilters() != null) {
-            for (var filter: filterDto.getFilters()) {
+            for (var filter : filterDto.getFilters()) {
                 spec.and(addCriteria(filter.getField(), filter.getValue(), filter.getCriteria().getValue()));
             }
         }
@@ -274,4 +284,20 @@ public class ProcessEntityService {
         return pageableDto;
     }
 
+
+    public List<TaskDto> fetchTasksByUserRole() {
+        List<String> customRole = securityService.getCustomRole();
+        List<TaskEntity> tasks = taskEntityRepository.findAllByTaskDefinition_assignRoleIn(customRole);
+        log.info("Successfully fetched tasks for given user role: {}, size: {}", customRole, tasks.size());
+        if (CollectionUtils.isEmpty(tasks)) {
+            throw new NotFoundException("User has no assigned tasks");
+        }
+
+        return processMapper.toDtoTaskList(tasks);
+    }
+
+
+    private boolean noUserAccessToTask(TaskEntity task) {
+        return !securityService.getCustomRole().contains(task.getTaskDefinition().getAssignRole());
+    }
 }

@@ -1,14 +1,18 @@
 package com.yeshenko.processserviceui.backend;
 
 import jakarta.servlet.ServletException;
-import java.util.Map;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.function.ServerRequest;
 import org.springframework.web.servlet.function.ServerResponse;
@@ -18,9 +22,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.io.IOException;
 import java.net.URI;
 import java.time.Duration;
+import java.util.Map;
 
 @Service
 public class HandleRequestService {
+    private static final Logger logger = LoggerFactory.getLogger(HandleRequestService.class);
     private final RestTemplate restTemplate;
 
     @Value("${mirror.backend:http://localhost:8080}")
@@ -45,17 +51,36 @@ public class HandleRequestService {
             }
 
             URI uri = buildURI(serverRequest.uri());
+            logger.info(requestEntity.toString());
             ResponseEntity<?> responseEntity = restTemplate.exchange(uri, serverRequest.method(), requestEntity, byte[].class);
-
+            logger.info(responseEntity.toString());
             var builder = ServerResponse.status(responseEntity.getStatusCode())
-                    .headers(headers -> headers.putAll(responseEntity.getHeaders()));
+                    .headers(h -> {
+                        responseEntity.getHeaders().forEach((key, value) -> {
+                            if (!key.equals("Transfer-Encoding")) {
+                                h.add(key, value.get(0));
+                            }
+                        });
+                    });
 
             if (responseEntity.getBody() != null) {
                 return builder.body(responseEntity.getBody());
             }
+
             return builder.build();
         } catch (ServletException | IOException e) {
+            logger.info(e.getMessage(), e);
             throw new RuntimeException(e);
+        } catch (HttpClientErrorException e) {
+            logger.info(e.getMessage(), e);
+
+            var builder = ServerResponse.status(e.getStatusCode().value());
+
+            if (e.getResponseHeaders() != null) {
+                builder.headers(headers -> headers.putAll(e.getResponseHeaders()));
+            }
+
+            return builder.body(e.getResponseBodyAsByteArray());
         }
     }
 

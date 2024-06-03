@@ -3,11 +3,12 @@ package com.yeshenko.processserviceapi.controller.v1;
 import com.yeshenko.processserviceapi.api.v1.ProcessApiDelegate;
 import com.yeshenko.processserviceapi.models.v1.*;
 import com.yeshenko.processserviceapi.service.process.ProcessEntityService;
-import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -60,5 +61,10 @@ public class ProcessServiceApiDelegateImpl implements ProcessApiDelegate {
   @Override
   public ResponseEntity<PageableDto> getFilteredProcesses(ProcessFilterDto processFilterDto) {
     return ResponseEntity.ok(processEntityService.getFilteredProcesses(processFilterDto));
+  }
+
+  @Override
+  public ResponseEntity<List<TaskDto>> getTaskByUserRole() {
+    return ResponseEntity.ok(processEntityService.fetchTasksByUserRole());
   }
 }

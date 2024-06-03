@@ -9,14 +9,21 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-  @Bean
-  public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests(auth -> auth
-            .anyRequest().authenticated()
-        )
-        .cors(AbstractHttpConfigurer::disable)
-        .csrf(AbstractHttpConfigurer::disable);
-    http.oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/", true).failureUrl("/process"));
-    return http.build();
-  }
+    private final KeyCloakLogoutHandler keyCloakLogoutHandler;
+
+    public SecurityConfig(KeyCloakLogoutHandler keyCloakLogoutHandler) {
+        this.keyCloakLogoutHandler = keyCloakLogoutHandler;
+    }
+
+    @Bean
+    public SecurityFilterChain resourceServerFilterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(auth -> auth
+                        .anyRequest().authenticated()
+                )
+                .cors(AbstractHttpConfigurer::disable)
+                .csrf(AbstractHttpConfigurer::disable);
+        http.oauth2Login(oauth2 -> oauth2.defaultSuccessUrl("/", false).failureUrl("/failed"));
+        http.logout(logout -> logout.addLogoutHandler(keyCloakLogoutHandler).logoutSuccessUrl("/"));
+        return http.build();
+    }
 }

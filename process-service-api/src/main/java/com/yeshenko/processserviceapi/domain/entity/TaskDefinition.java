@@ -5,6 +5,7 @@ import static com.yeshenko.processserviceapi.domain.entity.TaskDefinition.TaskDe
 import static com.yeshenko.processserviceapi.domain.entity.TaskDefinition.TaskDefinitionColumn.CUSTOM_TASK_NAME;
 import static com.yeshenko.processserviceapi.domain.entity.TaskDefinition.TaskDefinitionColumn.DEFINITION_KEY;
 import static com.yeshenko.processserviceapi.domain.entity.TaskDefinition.TaskDefinitionColumn.TABLE_NAME;
+import static com.yeshenko.processserviceapi.domain.entity.TaskDefinition.TaskDefinitionColumn.ASSIGN_ROLE;
 import static org.hibernate.envers.RelationTargetAuditMode.NOT_AUDITED;
 
 import jakarta.persistence.Column;
@@ -36,6 +37,7 @@ public class TaskDefinition {
     public static final String DEFINITION_KEY = "definition_key";
     public static final String COLUMN_SCHEMA = "schema";
     public static final String CUSTOM_TASK_NAME = "custom_task_name";
+    public static final String ASSIGN_ROLE = "assign_role";
 
     private TaskDefinitionColumn() {}
   }
@@ -55,4 +57,7 @@ public class TaskDefinition {
 
   @Column(name = CUSTOM_TASK_NAME)
   private String customTaskName;
+
+  @Column(name = ASSIGN_ROLE)
+  private String assignRole;
 }

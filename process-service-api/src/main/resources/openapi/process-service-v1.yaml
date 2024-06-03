@@ -343,6 +343,46 @@ paths:
             application/json:
               schema:
                 $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+
+  '/process/task/assigned':
+    get:
+      tags:
+        - Process
+      operationId: getTaskByUserRole
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '404':
+          description: Content / ID not found
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "./HttpProblem.yaml/#/components/schemas/HttpProblem"
+
   '/process/task':
     get:
       tags:

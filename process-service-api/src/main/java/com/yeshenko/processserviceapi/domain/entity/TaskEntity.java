@@ -46,6 +46,7 @@ public class TaskEntity extends UpdateAuditableEntity {
 
   @ManyToOne
   @JoinColumn(name = PROCESS_ID_FK, nullable = false)
+  @ToString.Exclude
   private ProcessEntity processEntity;
 
   @Column(name = FLOWABLE_TASK_ID)
